@@ -86,6 +86,36 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
+
+    #toolbar-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:0 0 auto;
+    }
+    
+    .toolbar-icon-btn{
+      appearance:none;
+      border:0;
+      background:rgba(58, 47, 42, 0.06);
+      color:#2d2530;
+      height:36px;
+      min-width:36px;
+      padding:0 10px;
+      border-radius:999px;
+      font-size:15px;
+      font-weight:700;
+      line-height:1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    
+    .toolbar-icon-btn:focus-visible{
+      outline:2px solid rgba(58, 47, 42, 0.22);
+      outline-offset:2px;
+    }
     
     /* Moment pills container */
     #moment-bar {
@@ -160,12 +190,14 @@
       outline-offset: 2px;
     }
     
-    #searchTopRow {
-      display: none;
+    #searchTopRow{
+      display:none;
+      align-self:flex-end;
+      width:min(260px, calc(100vw - 28px));
     }
     
-    #searchTopRow.is-open {
-      display: block;
+    #searchTopRow.is-open{
+      display:block;
     }
     
     .ss-searchTop {
@@ -609,7 +641,11 @@
       <button class="moment-pill" type="button" data-moment="relax">Relax</button>
     </div>
 
-    <button id="searchToggle" type="button" aria-label="Search" aria-expanded="false">🔍</button>
+    <div id="toolbar-actions">
+      <button id="locateBtn" class="toolbar-icon-btn" type="button" aria-label="Near me">⌖</button>
+      <button id="resetBtn" class="toolbar-icon-btn" type="button" aria-label="Reset">↺</button>
+      <button id="searchToggle" class="toolbar-icon-btn" type="button" aria-label="Search" aria-expanded="false">🔍</button>
+    </div>
   </div>
 
   <div id="searchTopRow">
@@ -1484,6 +1520,34 @@ searchClear?.addEventListener("click", () => {
   applyFiltersUnified();
 });
 
+const locateBtn = document.getElementById("locateBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+locateBtn?.addEventListener("click", e => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  if (window.webkit?.messageHandlers?.sipSober) {
+    window.webkit.messageHandlers.sipSober.postMessage({ type: "requestLocation" });
+  }
+});
+
+resetBtn?.addEventListener("click", e => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  currentMoment = "all";
+  syncMomentPillsUI();
+  updateActiveMoment();
+
+  if (searchInput) searchInput.value = "";
+
+  document.getElementById("searchTopRow")?.classList.remove("is-open");
+  document.getElementById("searchToggle")?.setAttribute("aria-expanded", "false");
+
+  resetMapToDefault();
+});
+  
 (() => {
   const panel = document.getElementById("bottom-panel");
   const toggle = document.getElementById("panel-toggle");
