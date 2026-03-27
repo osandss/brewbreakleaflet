@@ -64,132 +64,158 @@
     #filters {
       position: fixed;
       top: 10px;
-      left: 20px;
-      right: 12px;
+      left: 14px;
+      right: 14px;
       z-index: 3100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Top row container */
+    #filters-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 8px 10px;
+      background: rgba(255, 252, 248, 0.94);
+      border: 1px solid rgba(58, 47, 42, 0.10);
+      border-radius: 22px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    
+    /* Moment pills container */
+    #moment-bar {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: nowrap;
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.98);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    #moment-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Pills */
+    .moment-pill {
+      appearance: none;
+      border: 1px solid rgba(58, 47, 42, 0.10);
+      background: rgba(255, 255, 255, 0.72);
+      color: #2d2530;
+      padding: 10px 14px;
       border-radius: 999px;
-      border: 1px solid #e2e4ec;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
-      backdrop-filter: none;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      flex: 0 0 auto;
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
     }
 
-    #moment-bar{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      overflow-x:auto;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-      min-width:0;
-      flex:1 1 auto;
-    }
-
-    #moment-bar::-webkit-scrollbar{
-      display:none;
-    }
-
-    .moment-pill{
-      appearance:none;
-      border:none;
-      background:rgba(255,255,255,0.92);
-      color:#202239;
-      padding:9px 14px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:600;
-      line-height:1;
-      letter-spacing:-0.01em;
-      white-space:nowrap;
-      flex:0 0 auto;
-      box-shadow:0 1px 3px rgba(0,0,0,0.08);
-      cursor:pointer;
-      transition:background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
-    }
-
-    .moment-pill:hover{
-      transform:translateY(-1px);
+    .moment-pill:hover {
+      transform: translateY(-1px);
     }
     
-    .moment-pill.active{
-      background:#202239;
-      color:#fff;
-      box-shadow:0 4px 14px rgba(0,0,0,0.16);
+    .moment-pill.active {
+      background: #3a2f2a; /* espresso tone */
+      border-color: #3a2f2a;
+      color: #fffdf9;
+      box-shadow: 0 5px 14px rgba(58, 47, 42, 0.18);
     }
 
-    .moment-pill:focus-visible{
-      outline:2px solid rgba(32,34,57,0.28);
-      outline-offset:2px;
+    .moment-pill:focus-visible {
+      outline: 2px solid rgba(58, 47, 42, 0.22);
+      outline-offset: 2px;
     }
 
+    #searchToggle {
+      appearance: none;
+      border: 0;
+      background: rgba(58, 47, 42, 0.06);
+      color: #2d2530;
+      height: 36px;
+      min-width: 36px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    #searchToggle:focus-visible {
+      outline: 2px solid rgba(58, 47, 42, 0.22);
+      outline-offset: 2px;
+    }
+    
+    #searchTopRow {
+      display: none;
+    }
+    
+    #searchTopRow.is-open {
+      display: block;
+    }
+    
     .ss-searchTop {
       display: flex;
       align-items: center;
       gap: 8px;
-      height: 26px;
-      padding: 0 10px;
-      background: #f2f2f7;
-      border: 1px solid #ccc;
-      border-radius: 999px;
-      font-size: 12px;
-      width: 160px;
-      min-width: 160px;
-      max-width: 160px;
-      flex: 0 0 160px;
-      overflow: hidden;
+      height: 42px;
+      padding: 0 14px;
+      background: rgba(255, 252, 248, 0.96);
+      border: 1px solid rgba(58, 47, 42, 0.10);
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
     }
-
-    .ss-searchIcon { font-size: 11px; opacity: 0.6; }
-
+    
+    .ss-searchIcon {
+      font-size: 13px;
+      opacity: 0.55;
+    }
+    
     #searchTopInput {
       border: 0;
       outline: none;
       background: transparent;
       width: 100%;
-      font-size: 16px;
       min-width: 0;
+      font-size: 15px;
+      color: #2d2530;
       line-height: 1;
-      transform: scale(0.82);
-      transform-origin: left center;
+      transform: none;
     }
-
-    #searchTopInput::-webkit-search-cancel-button { -webkit-appearance: none; }
-
+    
+    #searchTopInput::placeholder {
+      color: rgba(45, 37, 48, 0.48);
+    }
+    
+    #searchTopInput::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+    }
+    
     #searchTopClear {
       border: 0;
       background: transparent;
-      font-size: 16px;
+      font-size: 18px;
       line-height: 1;
-      opacity: 0.6;
+      opacity: 0.55;
       cursor: pointer;
       padding: 0;
+      color: #2d2530;
     }
-
-    #searchToggle {
-      border: 1px solid #ccc;
-      background: #f2f2f7;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 16px;
-      cursor: pointer;
-      color: #2f3b69;
-    }
-
-    #searchTopRow {
-      display: none;
-      width: 100%;
-      margin-top: 4px;
-      padding-left: 6px;
-    }
-
-    #searchTopRow.is-open { display: block; }
-
-
+    
     /* ═══════════════════════════════════════════════
        FIX 1: #map uses position:fixed (not absolute).
        This is the #1 cause of the grey-tile flash and
@@ -411,7 +437,7 @@
 
     @media (max-width: 720px) { #filters { top: 10px; } }
 
-    body.ss-embed #filters { display: none !important; }
+    body.ss-embed #filters { display: flex !important; }
 
     .fav-btn {
       background: none;
@@ -574,15 +600,17 @@
 </div>
 
 <div id="filters" class="topbar filterbar">
-  <div id="moment-bar" aria-label="Moments">
-    <button class="moment-pill active" type="button" data-moment="all">All</button>
-    <button class="moment-pill" type="button" data-moment="work">Work</button>
-    <button class="moment-pill" type="button" data-moment="quick">Quick</button>
-    <button class="moment-pill" type="button" data-moment="social">Social</button>
-    <button class="moment-pill" type="button" data-moment="relax">Relax</button>
-  </div>
+  <div id="filters-main">
+    <div id="moment-bar" aria-label="Moments">
+      <button class="moment-pill active" type="button" data-moment="all">All</button>
+      <button class="moment-pill" type="button" data-moment="work">Work</button>
+      <button class="moment-pill" type="button" data-moment="quick">Quick</button>
+      <button class="moment-pill" type="button" data-moment="social">Social</button>
+      <button class="moment-pill" type="button" data-moment="relax">Relax</button>
+    </div>
 
-  <button id="searchToggle" type="button" aria-label="Search" aria-expanded="false">🔍</button>
+    <button id="searchToggle" type="button" aria-label="Search" aria-expanded="false">🔍</button>
+  </div>
 
   <div id="searchTopRow">
     <div class="ss-searchTop">
@@ -1026,6 +1054,7 @@ function updateActiveMoment(){
   x.textContent = "×";
   x.addEventListener("click", () => {
     currentMoment = "all";
+    syncMomentPillsUI();
     applyFiltersUnified();
   });
 
@@ -1285,6 +1314,13 @@ window.SipSober.setFavorites=function(payload){
 
 window.BrewBreak = window.BrewBreak || {};
 
+function syncMomentPillsUI(){
+  document.querySelectorAll(".moment-pill").forEach(btn => {
+    const value = String(btn.dataset.moment || "all").toLowerCase().trim();
+    btn.classList.toggle("active", value === currentMoment);
+  });
+}
+  
 function setMoment(moment){
   const nextMoment = String(moment || "all").toLowerCase();
 
@@ -1292,6 +1328,7 @@ function setMoment(moment){
     ? nextMoment
     : "all";
 
+  syncMomentPillsUI();
   updateActiveMoment();
   applyFiltersUnified();
 }
@@ -1470,6 +1507,7 @@ searchClear?.addEventListener("click", () => {
 })();
 
 bindMomentPills();
+syncMomentPillsUI();
 updateActiveMoment();
 
 // Render list immediately (map init is async but list doesn't need it)
