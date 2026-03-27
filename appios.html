@@ -167,86 +167,6 @@
       outline-offset: 2px;
     }
 
-    #searchToggle {
-      appearance: none;
-      border: 0;
-      background: rgba(58, 47, 42, 0.06);
-      color: #2d2530;
-      height: 36px;
-      min-width: 36px;
-      padding: 0 12px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    
-    #searchToggle:focus-visible {
-      outline: 2px solid rgba(58, 47, 42, 0.22);
-      outline-offset: 2px;
-    }
-    
-    #searchTopRow{
-      display:none;
-      align-self:flex-end;
-      width:min(260px, calc(100vw - 28px));
-    }
-    
-    #searchTopRow.is-open{
-      display:block;
-    }
-    
-    .ss-searchTop {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      height: 42px;
-      padding: 0 14px;
-      background: rgba(255, 252, 248, 0.96);
-      border: 1px solid rgba(58, 47, 42, 0.10);
-      border-radius: 16px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-    }
-    
-    .ss-searchIcon {
-      font-size: 13px;
-      opacity: 0.55;
-    }
-    
-    #searchTopInput {
-      border: 0;
-      outline: none;
-      background: transparent;
-      width: 100%;
-      min-width: 0;
-      font-size: 15px;
-      color: #2d2530;
-      line-height: 1;
-      transform: none;
-    }
-    
-    #searchTopInput::placeholder {
-      color: rgba(45, 37, 48, 0.48);
-    }
-    
-    #searchTopInput::-webkit-search-cancel-button {
-      -webkit-appearance: none;
-    }
-    
-    #searchTopClear {
-      border: 0;
-      background: transparent;
-      font-size: 18px;
-      line-height: 1;
-      opacity: 0.55;
-      cursor: pointer;
-      padding: 0;
-      color: #2d2530;
-    }
     
     /* ═══════════════════════════════════════════════
        FIX 1: #map uses position:fixed (not absolute).
@@ -644,15 +564,6 @@
     <div id="toolbar-actions">
       <button id="locateBtn" class="toolbar-icon-btn" type="button" aria-label="Near me">⌖</button>
       <button id="resetBtn" class="toolbar-icon-btn" type="button" aria-label="Reset">↺</button>
-      <button id="searchToggle" class="toolbar-icon-btn" type="button" aria-label="Search" aria-expanded="false">🔍</button>
-    </div>
-  </div>
-
-  <div id="searchTopRow">
-    <div class="ss-searchTop">
-      <span class="ss-searchIcon" aria-hidden="true">🔍</span>
-      <input id="searchTopInput" type="search" placeholder="Search a spot…" autocomplete="off"/>
-      <button id="searchTopClear" type="button" aria-label="Clear search">×</button>
     </div>
   </div>
 </div>
@@ -1319,12 +1230,7 @@ function fitInitialView(){
 
 function resetMapToDefault(){
   closeAllMenus();
-  document.getElementById("searchTopRow")?.classList.remove("is-open");
-  document.getElementById("searchToggle")?.setAttribute("aria-expanded","false");
-
-  const si = document.getElementById("searchTopInput");
-  if (si) si.value = "";
-
+  
   currentMoment = "all";
   _suppressAutoFit = true;
 
@@ -1426,8 +1332,6 @@ document.addEventListener("keydown", e => {
 document.addEventListener("click", e => {
   if (e.target.closest("a")) {
     closeAllMenus();
-    document.getElementById("searchTopRow")?.classList.remove("is-open");
-    document.getElementById("searchToggle")?.setAttribute("aria-expanded", "false");
     return;
   }
 
@@ -1463,62 +1367,9 @@ document.addEventListener("click", e => {
     window.SipSober?.focusVenue(nameEl.dataset.focusId);
     return;
   }
-
-  if (!e.target.closest("#searchTopRow") && !e.target.closest("#searchToggle")) {
-    const row = document.getElementById("searchTopRow");
-    if (row?.classList.contains("is-open")) {
-      row.classList.remove("is-open");
-      document.getElementById("searchToggle")?.setAttribute("aria-expanded", "false");
-      document.getElementById("searchTopInput")?.blur();
-    }
-  }
+  
 });
 
-(() => {
-  const toggle = document.getElementById("searchToggle");
-  const row = document.getElementById("searchTopRow");
-  const input = document.getElementById("searchTopInput");
-  if (!toggle || !row) return;
-
-  function openRow() {
-    row.classList.add("is-open");
-    toggle.setAttribute("aria-expanded", "true");
-    setTimeout(() => input?.focus(), 50);
-  }
-
-  function closeRow() {
-    row.classList.remove("is-open");
-    toggle.setAttribute("aria-expanded", "false");
-    input?.blur();
-  }
-
-  window.SipSober._openSearchRow = openRow;
-  window.SipSober._closeSearchRow = closeRow;
-
-  toggle.addEventListener("click", e => {
-    e.preventDefault();
-    e.stopPropagation();
-    row.classList.contains("is-open") ? closeRow() : openRow();
-  });
-})();
-
-const searchInput = document.getElementById("searchTopInput");
-const searchClear = document.getElementById("searchTopClear");
-
-searchInput?.addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    applyFiltersUnified();
-    document.getElementById("searchTopRow")?.classList.remove("is-open");
-    document.getElementById("searchToggle")?.setAttribute("aria-expanded", "false");
-    searchInput.blur();
-  }
-});
-
-searchClear?.addEventListener("click", () => {
-  if (searchInput) searchInput.value = "";
-  applyFiltersUnified();
-});
 
 const locateBtn = document.getElementById("locateBtn");
 const resetBtn = document.getElementById("resetBtn");
@@ -1540,12 +1391,8 @@ resetBtn?.addEventListener("click", e => {
   syncMomentPillsUI();
   updateActiveMoment();
 
-  if (searchInput) searchInput.value = "";
-
-  document.getElementById("searchTopRow")?.classList.remove("is-open");
-  document.getElementById("searchToggle")?.setAttribute("aria-expanded", "false");
-
   resetMapToDefault();
+  
 });
   
 (() => {
