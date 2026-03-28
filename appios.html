@@ -23,22 +23,16 @@
     .leaflet-container { position: relative; }
 
     .leaflet-container::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: rgba(32, 34, 57, 0.10);
-      z-index: 200;
+      background: rgba(58, 47, 42, 0.06);
     }
-
+    
     .leaflet-container::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at 50% 32%, rgba(255,255,255,0) 0%, rgba(32,34,57,0.06) 60%, rgba(32,34,57,0.10) 100%);
-      opacity: 0.9;
-      z-index: 300;
+      background: radial-gradient(
+        circle at 50% 32%,
+        rgba(255,255,255,0) 0%,
+        rgba(58,47,42,0.04) 60%,
+        rgba(58,47,42,0.06) 100%
+      );
     }
 
     :root {
@@ -50,7 +44,6 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
       overscroll-behavior: none;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
       background: #ffffff;
@@ -60,16 +53,24 @@
       line-height: 1.45;
       font-size: 12px;
     }
+    
+    body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
     #filters {
-      position: fixed;
-      top: 8px;
-      left: 12px;
-      right: 12px;
-      z-index: 3100;
+      position: relative;
+      top: auto;
+      left: auto;
+      right: auto;
+      z-index: 20;
       display: flex;
       flex-direction: column;
       gap: 8px;
+      padding: 8px 12px 0;
+      background: transparent;
     }
 
     /* Top row container */
@@ -88,30 +89,33 @@
     }
 
     #toolbar-actions{
-      position: fixed;
+      position: absolute;
       right: 16px;
-      bottom: 190px; /* adjust after testing */
+    
+      /* anchors to bottom of map instead of screen */
+      top: calc(36vh + 8px + 60px);
+    
       z-index: 3200;
     
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     
     .toolbar-icon-btn{
       appearance: none;
-      border: 1px solid rgba(58, 47, 42, 0.10);
-      background: rgba(255, 252, 248, 0.94);
+      border: 1px solid rgba(58, 47, 42, 0.08);
+      background: rgba(255, 252, 248, 0.92);
       color: #2d2530;
     
-      width: 44px;
-      height: 44px;
-      min-width: 44px;
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
       padding: 0;
     
       border-radius: 999px;
     
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       line-height: 1;
     
@@ -121,7 +125,7 @@
     
       cursor: pointer;
     
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
     
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -190,15 +194,13 @@
        iOS's async layout pipeline.
        ─────────────────────────────────────────────── */
     #map {
-      position: fixed;
-      top: 0; left: 0;
+      position: relative;
       width: 100%;
-      height: 100%;
-
-      /* Warm fallback so blank area is never cold grey */
+      height: 36vh;
+      min-height: 240px;
+      max-height: 360px;
+      flex: 0 0 auto;
       background: #f0ede8;
-
-      /* Promote to GPU compositor layer before tiles arrive */
       will-change: transform;
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
@@ -213,36 +215,43 @@
       transition: opacity 0.18s ease;
     }
     
-    @supports (height: 100dvh) { #map { height: 100dvh; } }
+    @supports (height: 100dvh) {
+      #map {
+        height: 36dvh;
+      }
+    }
 
     /* Match #map fallback — no grey flash between map div and tiles */
     .leaflet-container { background: #f0ede8; }
 
     #bottom-panel {
-      position: fixed;
-      left: 12px;
-      right: 12px;
-      bottom: 0;
-      height: var(--panel-collapsed);
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 22px 22px 0 0;
-      box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.08);
+      position: relative;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      flex: 1 1 auto;
+      min-height: 0;
+      background: #fffdf9;
+      border-top: 1px solid rgba(58, 47, 42, 0.08);
+      border-radius: 0;
+      box-shadow: none;
       display: flex;
       flex-direction: column;
-      padding: 8px 14px calc(10px + env(safe-area-inset-bottom));
-      z-index: 2001;
-      transition: none !important;
+      padding: 0 14px calc(10px + env(safe-area-inset-bottom));
+      z-index: 1;
       overflow: hidden;
     }
 
-    #bottom-panel.expanded { height: var(--panel-expanded); }
+    #bottom-panel.expanded { height: auto; }
 
-    #panel-header { flex: 0 0 auto; padding: 0 10px 6px; }
+    #panel-header {
+      flex: 0 0 auto;
+      padding: 12px 2px 8px;
+    }
 
     #panel-body {
       flex: 1 1 auto;
+      min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       padding: 6px 0 10px;
@@ -291,30 +300,12 @@
     }
 
     #panel-toggle {
-      width: 100%;
-      border: 0;
-      background: transparent;
-      padding: 6px 0 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+      display: none;
     }
-
-    #panel-toggle .handle {
-      width: 44px;
-      height: 5px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.18);
-    }
-
+    
+    #panel-toggle .handle,
     #panel-toggle .label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #202239;
-      opacity: 0.75;
+      display: none;
     }
 
     #results-count {
@@ -328,7 +319,7 @@
     }
 
     .card {
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-bottom: 1px solid #eee;
       margin-bottom: 0;
       font-size: 12px;
@@ -401,8 +392,6 @@
       color: rgba(28, 28, 30, 0.65);
       cursor: pointer;
     }
-
-    @media (max-width: 720px) { #filters { top: 10px; } }
 
     body.ss-embed #filters { display: flex !important; }
 
