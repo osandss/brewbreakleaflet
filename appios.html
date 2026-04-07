@@ -118,7 +118,6 @@
       font-size: 15px;
       font-weight: 700;
       line-height: 1;
-    
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -226,27 +225,30 @@
 
     #bottom-panel {
       position: relative;
-      left: auto;
-      right: auto;
-      bottom: auto;
       flex: 1 1 auto;
       min-height: 0;
-      background: #fffdf9;
-      border-top: 1px solid rgba(58, 47, 42, 0.08);
-      border-radius: 0;
-      box-shadow: none;
+    
+      background: #FFFBF6;
+      border-top: 1px solid rgba(74, 56, 47, 0.08);
+    
+      border-radius: 22px 22px 0 0;
+      box-shadow: 0 -8px 20px rgba(58, 47, 42, 0.05);
+    
       display: flex;
       flex-direction: column;
-      padding: 0 14px calc(10px + env(safe-area-inset-bottom));
+      padding: 0 16px calc(12px + env(safe-area-inset-bottom));
+    
       z-index: 1;
       overflow: hidden;
+    
+      margin-top: -8px;
     }
 
     #bottom-panel.expanded { height: auto; }
 
     #panel-header {
       flex: 0 0 auto;
-      padding: 12px 2px 8px;
+      padding: 10px 2px 6px;
     }
 
     #panel-body {
@@ -319,39 +321,190 @@
     }
 
     .card {
-      padding: 10px 12px;
-      border-bottom: 1px solid #eee;
+      padding: 0;
+      border-bottom: none;
       margin-bottom: 0;
       font-size: 12px;
       color: #333;
       line-height: 1.25;
     }
-
-    .card:last-child { border-bottom: none; }
-
-    .card-name {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      margin: 0 0 2px 0;
-      line-height: 1.18;
-      color: #111;
+    
+    .card:last-child {
+      border-bottom: none;
+    }
+    
+    .featured-card {
+      background: #F7F2EB;
+      border: 1px solid rgba(74, 56, 47, 0.10);
+      border-radius: 20px;
+      padding: 16px;
+      margin: 2px 0 14px;
+      box-shadow: 0 8px 18px rgba(58, 47, 42, 0.06);
+    }
+    
+    .featured-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7A6C63;
+      margin-bottom: 8px;
+    }
+    
+    .featured-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    
+    .featured-title {
+      font-size: 18px;
+      font-weight: 650;
+      line-height: 1.12;
+      color: #2F241E;
+      margin: 0 0 5px;
+    }
+    
+    .featured-title.is-link {
       cursor: pointer;
     }
-
-    .card-name:hover { text-decoration: underline; }
-    .card .meta { margin: 0; line-height: 1.22; }
-    #bottom-panel .card p { margin: 0; line-height: 1.32; }
-
-    #bottom-panel .card a {
-      display: inline-block;
-      margin: 1px 0 3px;
-      font-size: 12px;
-      font-weight: 500;
-      color: #2f3b69;
+    
+    .featured-title.is-link:hover {
       text-decoration: underline;
     }
-
+    
+    .featured-address {
+      font-size: 13px;
+      line-height: 1.35;
+      color: #6E6259;
+      margin: 0 0 8px;
+    }
+    
+    .featured-neighborhood {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(74, 56, 47, 0.08);
+      color: #4A382F;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .featured-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+    
+    .featured-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 0 11px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid rgba(74, 56, 47, 0.10);
+    }
+    
+    .featured-actions a.primary {
+      background: #4A382F;
+      color: #FFF9F3;
+      border-color: #4A382F;
+    }
+    
+    .featured-actions a.secondary {
+      background: #EFE5DA;
+      color: #4A382F;
+    }
+    
+    .results-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7A6C63;
+      margin: 2px 0 10px;
+      padding: 0 2px;
+    }
+    
+    .compact-card {
+      padding: 14px 4px;
+      border-bottom: 1px solid rgba(74, 56, 47, 0.08);
+    }
+    
+    .compact-card:last-child {
+      border-bottom: none;
+    }
+    
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    
+    .card-name {
+      display: block;
+      font-size: 15px;
+      font-weight: 620;
+      margin: 0 0 4px 0;
+      line-height: 1.18;
+      color: #2F241E;
+      cursor: pointer;
+    }
+    
+    .card-name:hover {
+      text-decoration: underline;
+    }
+    
+    .card .meta {
+      margin: 0;
+      line-height: 1.35;
+      color: #6E6259;
+    }
+    
+    #bottom-panel .card p {
+      margin: 0;
+      line-height: 1.32;
+    }
+    
+    #bottom-panel .card a.card-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 7px 0 6px;
+      padding: 5px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #4A382F;
+      text-decoration: none;
+      background: #EFE5DA;
+      border: 1px solid rgba(74, 56, 47, 0.08);
+      border-radius: 999px;
+    }
+    
+    .fav-btn {
+      background: none;
+      border: 0;
+      padding: 4px;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      color: #C7BCB2;
+    }
+    
+    .fav-btn.is-fav {
+      color: #4A382F;
+    }
+    
     .leaflet-control-zoom { bottom: 20px; right: 20px; left: auto !important; top: auto !important; }
 
     .leaflet-top.leaflet-left {
@@ -395,25 +548,6 @@
 
     body.ss-embed #filters { display: flex !important; }
 
-    .fav-btn {
-      background: none;
-      border: 0;
-      padding: 4px;
-      cursor: pointer;
-      font-size: 18px;
-      line-height: 1;
-      color: #b9b9b9;
-    }
-
-    .fav-btn.is-fav { color: #202239; }
-
-    .card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 4px;
-    }
 
     .leaflet-popup-content-wrapper {
       border-radius: 18px !important;
@@ -484,54 +618,7 @@
       right: 6px !important; top: 6px !important;
     }
 
-    .ss-onboard {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%) translateY(8px);
-      top: 140px;
-      z-index: 5000;
-      width: calc(100% - 32px);
-      max-width: 420px;
-      opacity: 0;
-      transition: opacity 220ms ease, transform 220ms ease;
-      pointer-events: none;
-    }
-
-    .ss-onboard.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
-    .ss-onboard[hidden] { display: none !important; }
-
-    .ss-onboard__content {
-      pointer-events: auto;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(32,34,57,0.12);
-      border-radius: 18px;
-      padding: 14px 16px;
-      box-shadow: 0 10px 26px rgba(0,0,0,0.12);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-    }
-
-    .ss-onboard__title { font-size: 14px; font-weight: 800; color: #202239; margin-bottom: 4px; }
-    .ss-onboard__text { font-size: 13px; line-height: 1.3; color: rgba(0,0,0,0.65); margin-bottom: 10px; }
-    .ss-onboard__actions { display: flex; gap: 10px; align-items: center; }
-
-    .ss-onboard__btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 34px;
-      padding: 0 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .ss-onboard__btn--primary { border: 0; color: #fff; background: #202239; }
-    .ss-onboard__btn--ghost { border: 1px solid rgba(32,34,57,0.18); color: #202239; background: rgba(255,255,255,0.65); }
+    
   </style>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W6LRN7EDH7"></script>
@@ -544,16 +631,6 @@
 </head>
 
 <body>
-
-<div id="ss-onboard" class="ss-onboard" role="status" aria-live="polite" hidden>
-  <div class="ss-onboard__content">
-    <div class="ss-onboard__title">Explore &amp; save</div>
-    <div class="ss-onboard__text">Pick a <b>moment</b>, search nearby spots, and tap <b>★</b> to save favorites.</div>
-    <div class="ss-onboard__actions">
-      <button id="ss-onboard-ok" class="ss-onboard__btn ss-onboard__btn--primary" type="button">Got it</button>
-    </div>
-  </div>
-</div>
 
 <!-- TOP FILTER BAR -->
 <div id="filters" class="topbar filterbar">
@@ -820,7 +897,7 @@ function _initMap(){
     // FIX 3: tap:false stops Leaflet's iOS tap shim from triggering
     // an unwanted invalidateSize() that causes the visible jump.
     tap: false
-  }).setView([40.778,-73.985],12.1);
+  }).setView([40.758, -73.9855],11.6);
 
   const tiles = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     maxZoom: 20,
@@ -1067,16 +1144,83 @@ function renderMarkers(data){
 }
 
 function renderList(data){
-  const results=document.getElementById("results");
-  const rc=document.getElementById("results-count");
-  if(!results) return;
-  results.innerHTML="";
-  if(rc) rc.textContent=data.length===0?"No places found":`${data.length} place${data.length===1?"":"s"}`;
-  data.forEach(loc=>{
-    const card=document.createElement("div"); card.className="card";
-    const web=normalizeUrl(loc.website);
-    card.innerHTML=`<div class="card-top"><span class="card-name" data-focus-id="${loc.id}">${loc.name}</span><button class="fav-btn" data-id="${loc.id}" aria-label="Favorite">★</button></div><div class="meta">${loc.address||""}</div>${web?`<a href="${web}" target="_blank" rel="noopener">Website</a>`:""}<div class="meta">${[_distanceLabelForVenue(loc), loc.neighborhood || ""].filter(Boolean).join(" • ")}</div>`;    results.appendChild(card);
+  const results = document.getElementById("results");
+  const rc = document.getElementById("results-count");
+  if (!results) return;
+
+  results.innerHTML = "";
+
+  if (rc) {
+    rc.textContent = data.length === 0
+      ? "No places found"
+      : `${data.length} place${data.length === 1 ? "" : "s"}`;
+  }
+
+  if (!data.length) {
+    return;
+  }
+
+  const featured = data[0];
+  const rest = data.slice(1);
+
+  const featuredCard = document.createElement("div");
+  featuredCard.className = "card featured-card";
+
+  const featuredWeb = normalizeUrl(featured.website);
+  const featuredDirections = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((featured.name || "") + " " + (featured.address || ""))}`;
+  const featuredMeta = [_distanceLabelForVenue(featured), featured.neighborhood || ""]
+    .filter(Boolean)
+    .join(" • ");
+
+  featuredCard.innerHTML = `
+    <div class="featured-kicker">Your best pick</div>
+    <div class="featured-top">
+      <div style="flex:1;min-width:0;">
+        <div class="featured-title is-link" data-focus-id="${featured.id}">${featured.name}</div>
+        <div class="featured-address">${featured.address || ""}</div>
+        ${featuredMeta ? `<div class="featured-neighborhood">${featuredMeta}</div>` : ""}
+        <div class="featured-actions">
+          ${featuredWeb ? `<a class="primary" href="${featuredWeb}" target="_blank" rel="noopener">Website</a>` : ""}
+          <a class="secondary" href="${featuredDirections}" target="_blank" rel="noopener">Directions</a>
+        </div>
+      </div>
+      <button class="fav-btn" data-id="${featured.id}" aria-label="Favorite">★</button>
+    </div>
+  `;
+
+  results.appendChild(featuredCard);
+
+  if (rest.length) {
+    const label = document.createElement("div");
+    label.className = "results-section-label";
+    label.textContent = "More spots";
+    results.appendChild(label);
+  }
+
+  rest.forEach(loc => {
+    const card = document.createElement("div");
+    card.className = "card compact-card";
+
+    const web = normalizeUrl(loc.website);
+    const metaLine = [_distanceLabelForVenue(loc), loc.neighborhood || ""]
+      .filter(Boolean)
+      .join(" • ");
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div style="flex:1;min-width:0;">
+          <span class="card-name" data-focus-id="${loc.id}">${loc.name}</span>
+          <div class="meta">${loc.address || ""}</div>
+          ${web ? `<a class="card-link" href="${web}" target="_blank" rel="noopener">Website</a>` : ""}
+          <div class="meta">${metaLine}</div>
+        </div>
+        <button class="fav-btn" data-id="${loc.id}" aria-label="Favorite">★</button>
+      </div>
+    `;
+
+    results.appendChild(card);
   });
+
   window.SipSober?.sendVenuesToNative?.(data);
 }
 
@@ -1430,21 +1574,6 @@ updateActiveMoment();
 // Render list immediately (map init is async but list doesn't need it)
 renderList(locations.slice().sort((a, b) => (a.name || "").localeCompare(b.name || "")));
   
-</script>
-
-<script>
-(function(){
-  const KEY="ss_seen_map_onboarding_v1";
-  function showOnboarding(){
-    if(localStorage.getItem(KEY)==="true") return;
-    const el=document.getElementById("ss-onboard"); if(!el) return;
-    el.hidden=false; requestAnimationFrame(()=>el.classList.add("is-visible"));
-    const ok=document.getElementById("ss-onboard-ok");
-    function dismiss(){localStorage.setItem(KEY,"true");el.classList.remove("is-visible");setTimeout(()=>(el.hidden=true),240);}
-    ok?.addEventListener("click",dismiss);
-  }
-  window.addEventListener("load",()=>setTimeout(showOnboarding,450));
-})();
 </script>
 
 </body>
