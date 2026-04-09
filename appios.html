@@ -389,24 +389,22 @@
       text-decoration: underline;
     }
     
-    .featured-address {
-      font-size: 13px;
-      line-height: 1.35;
-      color: #6E6259;
-      margin: 0 0 8px;
+    /* NEW: moment sentence */
+    .featured-note {
+      font-size: 14px;
+      line-height: 1.42;
+      color: #5f5147;
+      margin: 6px 0 10px;
     }
     
-    .featured-neighborhood {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(74, 56, 47, 0.08);
-      color: #4A382F;
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 10px;
+    /* NEW: simple location */
+    .featured-location {
+      font-size: 12px;
+      line-height: 1.3;
+      color: #8a7a70;
+      margin-bottom: 14px;
     }
+    
     
     .featured-actions {
       display: flex;
@@ -776,7 +774,8 @@ const locations = [
     lng: -73.9797,
     website: "https://sotecoffeeroasters.com",
     neighborhood: "Upper West Side",
-    moments: ["work"]
+    moments: ["work"],
+    moment_note: "Quiet, focused space for getting work done."
   },
   {
     id: "787-coffee-chelsea",
@@ -786,7 +785,8 @@ const locations = [
     lng: -74.0016,
     website: "https://787coffee.com",
     neighborhood: "Chelsea",
-    moments: ["work"]
+    moments: ["work"],
+    moment_note: "Easy place to settle in with a laptop."
   },
   {
     id: "the-lost-draft-soho",
@@ -796,7 +796,8 @@ const locations = [
     lng: -73.9972,
     website: "https://thelostdraft.com",
     neighborhood: "SoHo",
-    moments: ["work"]
+    moments: ["work"],
+    moment_note: "Calm, tucked-away spot for working solo."
   },
   {
     id: "white-noise-coffee-midtown",
@@ -806,7 +807,8 @@ const locations = [
     lng: -73.9919,
     website: "https://whitenoisecoffee.com",
     neighborhood: "Midtown",
-    moments: ["work"]
+    moments: ["work"],
+    moment_note: "Reliable Midtown stop for a focused work block."
   },
   {
     id: "variety-coffee-roasters-chelsea",
@@ -816,7 +818,8 @@ const locations = [
     lng: -73.9945,
     website: "https://varietycoffeeroasters.com",
     neighborhood: "Chelsea",
-    moments: ["work"]
+    moments: ["work"],
+    moment_note: "Good energy for working without feeling rushed."
   },
 
   {
@@ -827,7 +830,8 @@ const locations = [
     lng: -73.9509,
     website: "https://greenlane.coffee",
     neighborhood: "Upper East Side",
-    moments: ["quick"]
+    moments: ["quick"],
+    moment_note: "Fast, no-fuss coffee stop on the go."
   },
   {
     id: "dae-day-coffee-midtown",
@@ -837,7 +841,8 @@ const locations = [
     lng: -73.9739,
     website: "https://daeday.com",
     neighborhood: "Midtown",
-    moments: ["quick"]
+    moments: ["quick"],
+    moment_note: "Quick Midtown pickup between meetings."
   },
   {
     id: "ground-central-51st",
@@ -847,7 +852,8 @@ const locations = [
     lng: -73.9818,
     website: "https://groundcentral.com",
     neighborhood: "Midtown",
-    moments: ["quick"]
+    moments: ["quick"],
+    moment_note: "Easy grab-and-go spot in a busy area."
   },
   {
     id: "787-coffee-midtown-east",
@@ -857,7 +863,8 @@ const locations = [
     lng: -73.9620,
     website: "https://787coffee.com",
     neighborhood: "Midtown East",
-    moments: ["quick"]
+    moments: ["quick"],
+    moment_note: "Reliable stop when you just need a coffee."
   },
 
   {
@@ -868,7 +875,8 @@ const locations = [
     lng: -74.0083,
     website: "https://hungryllamacafe.com",
     neighborhood: "West Village",
-    moments: ["social"]
+    moments: ["social"],
+    moment_note: "Lively spot for catching up with friends."
   },
   {
     id: "charlotte-cafe-gramercy",
@@ -878,7 +886,8 @@ const locations = [
     lng: -73.9765,
     website: "https://charlottecafe.com",
     neighborhood: "Gramercy",
-    moments: ["social"]
+    moments: ["social"],
+    moment_note: "Comfortable place to sit and talk for a while."
   },
   {
     id: "787-coffee-east-village",
@@ -888,7 +897,8 @@ const locations = [
     lng: -73.9872,
     website: "https://787coffee.com",
     neighborhood: "East Village",
-    moments: ["social"]
+    moments: ["social"],
+    moment_note: "Casual, easy meet-up spot in the East Village."
   },
   {
     id: "rhythm-zero-west-village",
@@ -898,7 +908,8 @@ const locations = [
     lng: -74.0043,
     website: "https://rhythmzeronyc.com",
     neighborhood: "West Village",
-    moments: ["social"]
+    moments: ["social"],
+    moment_note: "Great energy for a relaxed hang with friends."
   },
 
   {
@@ -909,7 +920,8 @@ const locations = [
     lng: -73.9832,
     website: "https://bookclubbar.com",
     neighborhood: "East Village",
-    moments: ["relax"]
+    moments: ["relax"],
+    moment_note: "Cozy, slower-paced spot to unwind."
   },
   {
     id: "greenhill-coffee-gramercy",
@@ -919,7 +931,8 @@ const locations = [
     lng: -73.9805,
     website: "",
     neighborhood: "Gramercy",
-    moments: ["relax"]
+    moments: ["relax"],
+    moment_note: "Quiet and low-key for a calm break."
   },
   {
     id: "787-coffee-west-village",
@@ -929,7 +942,8 @@ const locations = [
     lng: -74.0040,
     website: "https://787coffee.com",
     neighborhood: "West Village",
-    moments: ["relax"]
+    moments: ["relax"],
+    moment_note: "Easy place to sit and take your time."
   },
   {
     id: "red-beard-east-village",
@@ -939,7 +953,8 @@ const locations = [
     lng: -73.9834,
     website: "https://instagram.com/redbeardcoffeebakery",
     neighborhood: "East Village",
-    moments: ["relax"]
+    moments: ["relax"],
+    moment_note: "Small, cozy space for a slower coffee."
   },
   {
     id: "787-coffee-ues",
@@ -949,7 +964,8 @@ const locations = [
     lng: -73.9574,
     website: "https://787coffee.com",
     neighborhood: "Upper East Side",
-    moments: ["relax"]
+    moments: ["relax"],
+    moment_note: "Relaxed neighborhood spot to recharge."
   }
 ];
 
@@ -1259,21 +1275,16 @@ function renderList(data){
   featuredCard.className = "card featured-card";
 
   const featuredWeb = normalizeUrl(featured.website);
-  const featuredDirections = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((featured.name || "") + " " + (featured.address || ""))}`;
-  const featuredMeta = [_distanceLabelForVenue(featured), featured.neighborhood || ""]
-    .filter(Boolean)
-    .join(" • ");
 
   featuredCard.innerHTML = `
     <div class="featured-kicker">Your best pick</div>
     <div class="featured-top">
       <div style="flex:1;min-width:0;">
         <div class="featured-title is-link" data-focus-id="${featured.id}">${featured.name}</div>
-        <div class="featured-address">${featured.address || ""}</div>
-        ${featuredMeta ? `<div class="featured-neighborhood">${featuredMeta}</div>` : ""}
+        ${featured.moment_note ? `<div class="featured-note">${featured.moment_note}</div>` : ""}
+        ${featured.neighborhood ? `<div class="featured-location">${featured.neighborhood}</div>` : ""}
         <div class="featured-actions">
           ${featuredWeb ? `<a class="primary" href="${featuredWeb}" target="_blank" rel="noopener">Website</a>` : ""}
-          <a class="secondary" href="${featuredDirections}" target="_blank" rel="noopener">Directions</a>
         </div>
       </div>
       <button class="fav-btn" data-id="${featured.id}" aria-label="Favorite">★</button>
