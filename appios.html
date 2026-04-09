@@ -271,9 +271,9 @@
       min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 6px 0 10px;
+      padding: 4px 0 8px;
     }
-
+    
     #results { padding: 0; }
 
     #panel-meta-row {
@@ -351,9 +351,9 @@
     .featured-card {
       background: #F7F2EB;
       border: 1px solid rgba(74, 56, 47, 0.10);
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 16px;
-      margin: 2px 0 14px;
+      margin: 4px 0 16px;
       box-shadow: 0 8px 18px rgba(58, 47, 42, 0.06);
     }
     
@@ -447,6 +447,83 @@
       color: #7A6C63;
       margin: 2px 0 10px;
       padding: 0 2px;
+    }
+
+    .explore-rail {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 2px 0 6px;
+      margin-bottom: 4px;
+    }
+    
+    .explore-rail::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .explore-card {
+      flex: 0 0 248px;
+      background: #f8f3ec;
+      border: 1px solid rgba(74, 56, 47, 0.09);
+      border-radius: 20px;
+      padding: 14px 14px 12px;
+      box-shadow: 0 6px 14px rgba(58, 47, 42, 0.05);
+    }
+    
+    .explore-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    
+    .explore-card-name {
+      display: block;
+      font-size: 16px;
+      font-weight: 630;
+      line-height: 1.14;
+      letter-spacing: -0.02em;
+      color: #2f241e;
+      margin: 0 0 5px;
+      cursor: pointer;
+    }
+    
+    .explore-card-name:hover {
+      text-decoration: underline;
+    }
+    
+    .explore-card-address {
+      font-size: 12.5px;
+      line-height: 1.38;
+      color: #74675f;
+      margin: 0 0 6px;
+    }
+    
+    .explore-card-meta {
+      font-size: 12px;
+      line-height: 1.35;
+      color: #8a7a70;
+    }
+    
+    .explore-card-actions {
+      margin-top: 10px;
+    }
+    
+    .explore-card-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 0 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 620;
+      color: #4A382F;
+      text-decoration: none;
+      background: #efe5da;
+      border: 1px solid rgba(74, 56, 47, 0.08);
     }
     
     .compact-card {
@@ -1208,33 +1285,40 @@ function renderList(data){
   if (rest.length) {
     const label = document.createElement("div");
     label.className = "results-section-label";
-    label.textContent = "More spots";
+    label.textContent = "Keep exploring";
     results.appendChild(label);
-  }
 
-  rest.forEach(loc => {
-    const card = document.createElement("div");
-    card.className = "card compact-card";
+    const rail = document.createElement("div");
+    rail.className = "explore-rail";
 
-    const web = normalizeUrl(loc.website);
-    const metaLine = [_distanceLabelForVenue(loc), loc.neighborhood || ""]
-      .filter(Boolean)
-      .join(" • ");
+    rest.slice(0, 6).forEach(loc => {
+      const card = document.createElement("div");
+      card.className = "explore-card";
 
-    card.innerHTML = `
-      <div class="card-top">
-        <div style="flex:1;min-width:0;">
-          <span class="card-name" data-focus-id="${loc.id}">${loc.name}</span>
-          <div class="meta">${loc.address || ""}</div>
-          ${web ? `<a class="card-link" href="${web}" target="_blank" rel="noopener">Website</a>` : ""}
-          <div class="meta">${metaLine}</div>
+      const web = normalizeUrl(loc.website);
+      const metaLine = [_distanceLabelForVenue(loc), loc.neighborhood || ""]
+        .filter(Boolean)
+        .join(" • ");
+
+      card.innerHTML = `
+        <div class="explore-card-top">
+          <div style="flex:1;min-width:0;">
+            <span class="explore-card-name" data-focus-id="${loc.id}">${loc.name}</span>
+            <div class="explore-card-address">${loc.address || ""}</div>
+            <div class="explore-card-meta">${metaLine}</div>
+          </div>
+          <button class="fav-btn" data-id="${loc.id}" aria-label="Favorite">★</button>
         </div>
-        <button class="fav-btn" data-id="${loc.id}" aria-label="Favorite">★</button>
-      </div>
-    `;
+        <div class="explore-card-actions">
+          ${web ? `<a class="explore-card-link" href="${web}" target="_blank" rel="noopener">Website</a>` : ""}
+        </div>
+      `;
 
-    results.appendChild(card);
-  });
+      rail.appendChild(card);
+    });
+
+    results.appendChild(rail);
+  }
 
   window.SipSober?.sendVenuesToNative?.(data);
 }
