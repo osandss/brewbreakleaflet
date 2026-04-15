@@ -1001,7 +1001,7 @@ function _initMap(){
     // FIX 3: tap:false stops Leaflet's iOS tap shim from triggering
     // an unwanted invalidateSize() that causes the visible jump.
     tap: false
-  }).setView([40.758, -73.9855],11.6);
+  }).setView([40.758, -73.9855],11.2);
 
   const tiles = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -1471,13 +1471,14 @@ function fitInitialView(){
   const panelH = panel ? panel.getBoundingClientRect().height : 0;
 
   const defaultBounds = L.latLngBounds(
-    [40.715, -74.03],  // lower-left (trim lower Manhattan)
-    [40.835, -73.93]   // upper-right (show more upper Manhattan)
+    [40.705, -74.045],
+    [40.855, -73.92]
   );
 
   map.fitBounds(defaultBounds, {
     paddingTopLeft: [16, window.SipSober?.isEmbed ? 75 : 115],
     paddingBottomRight: [16, panelH + 30],
+    maxZoom: 12.4,
     animate: false
   });
 }
