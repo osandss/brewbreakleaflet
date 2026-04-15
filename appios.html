@@ -373,7 +373,7 @@
     }
     
     .featured-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 650;
       line-height: 1.08;
       color: #2F241E;
@@ -1004,10 +1004,11 @@ function _initMap(){
   }).setView([40.758, -73.9855],11.2);
 
   const tiles = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
     {
+      subdomains: "abcd",
       maxZoom: 20,
-      attribution: "&copy; OpenStreetMap contributors"
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
     }
   );
 
