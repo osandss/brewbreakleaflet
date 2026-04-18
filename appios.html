@@ -22,8 +22,7 @@
 
     .leaflet-container {
       position: relative;
-      background: #ece3d7;
-      filter: saturate(0.78) sepia(0.16) brightness(1.03);
+      background: #efe7dc;
     }
     
     .leaflet-container::before,
@@ -36,7 +35,7 @@
     
     .leaflet-container::before {
       z-index: 250;
-      background: rgba(126, 98, 73, 0.18);
+      background: rgba(122, 93, 70, 0.10);
       mix-blend-mode: multiply;
     }
     
@@ -45,10 +44,18 @@
       background:
         linear-gradient(
           to bottom,
-          rgba(255, 250, 244, 0.14) 0%,
-          rgba(255, 248, 240, 0.04) 38%,
-          rgba(101, 76, 58, 0.08) 100%
+          rgba(255, 250, 245, 0.10) 0%,
+          rgba(255, 250, 245, 0.03) 40%,
+          rgba(98, 74, 58, 0.06) 100%
         );
+    }
+
+    .leaflet-tile {
+      filter: sepia(0.22) saturate(0.72) brightness(1.05) contrast(0.88);
+    }
+    
+    .leaflet-tile-pane {
+      opacity: 0.92;
     }
 
     :root {
@@ -214,7 +221,7 @@
       min-height: 300px;
       max-height: 460px;
       flex: 0 0 auto;
-      background: #ece3d7;
+      background: #efe7dc;
       will-change: transform;
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
@@ -236,7 +243,7 @@
     }
 
     /* Match #map fallback — no grey flash between map div and tiles */
-    .leaflet-container { background: #ece3d7; }
+    .leaflet-container { background: #efe7dc; }
 
     #bottom-panel {
       position: relative;
@@ -1005,11 +1012,11 @@ function _initMap(){
   }).setView([40.758, -73.9855],11.2);
 
   const tiles = L.tileLayer(
-    "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+    "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",
     {
-      subdomains: "abc",
+      subdomains: "abcd",
       maxZoom: 20,
-      attribution: "&copy; OpenStreetMap contributors"
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
     }
   );
 
