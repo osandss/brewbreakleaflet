@@ -25,19 +25,20 @@
 ========================================================= */
 
 :root {
-  --espresso: #33251f;
-  --espresso-deep: #241915;
-  --coffee: #594237;
+  /* SIP SOBER / XCODE */
+  --espresso: #F7F7FA;
+  --espresso-deep: #FFFFFF;
+  --coffee: #D7D9E3;
 
-  --cream: #fffaf4;
-  --cream-2: #f8efe6;
-  --cream-3: #eee0d3;
+  --cream: #1B1E31;
+  --cream-2: #1F2237;
+  --cream-3: #252A3F;
 
-  --taupe: #8d7d73;
-  --muted: #9b8d85;
+  --taupe: rgba(255,255,255,.62);
+  --muted: rgba(255,255,255,.46);
 
-  --line: rgba(62, 43, 34, 0.10);
-  --shadow: rgba(47, 32, 25, 0.14);
+  --line: rgba(255,255,255,.08);
+  --shadow: rgba(0,0,0,.20);
 
   --map-height: 54vh;
 }
@@ -89,12 +90,12 @@ body {
   flex: 0 0 auto;
 
   background:
-    linear-gradient(
-      180deg,
-      #d7c4b5 0%,
-      #eadfd3 38%,
-      #f5eee6 100%
-    );
+  linear-gradient(
+    180deg,
+    #D9DCE5 0%,
+    #E4E6EC 45%,
+    #EEEFF3 100%
+  );
 
   overflow: hidden;
 
@@ -125,7 +126,7 @@ body.map-ready #map {
 
 .leaflet-container {
   position: relative;
-  background: #e8ddd2;
+  background: #E6E8ED;
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -139,10 +140,10 @@ body.map-ready #map {
 */
 .leaflet-tile {
   filter:
-    sepia(.28)
     saturate(.55)
-    brightness(1.03)
-    contrast(.82);
+    brightness(.98)
+    contrast(.88)
+    hue-rotate(175deg);
 }
 
 .leaflet-tile-pane {
@@ -163,11 +164,10 @@ body.map-ready #map {
   background:
     linear-gradient(
       180deg,
-      rgba(70, 47, 36, .24) 0%,
-      rgba(100, 73, 58, .13) 20%,
-      rgba(220, 202, 187, .04) 48%,
-      rgba(255, 249, 242, .16) 75%,
-      rgba(255, 250, 244, .54) 100%
+      rgba(27, 30, 49, .22) 0%,
+      rgba(31, 34, 55, .13) 30%,
+      rgba(34, 38, 58, .06) 60%,
+      rgba(27, 30, 49, .12) 100%
     );
 
   mix-blend-mode: multiply;
@@ -189,19 +189,19 @@ body.map-ready #map {
 
   background:
     radial-gradient(
-      circle at 50% 36%,
+      circle at 50% 38%,
       rgba(255,255,255,0) 0%,
       rgba(255,255,255,0) 42%,
-      rgba(255,249,242,.10) 74%,
-      rgba(255,249,242,.28) 100%
+      rgba(31,34,55,.04) 72%,
+      rgba(27,30,49,.12) 100%
     ),
     linear-gradient(
       180deg,
-      rgba(61, 42, 33, .20) 0%,
-      rgba(61, 42, 33, .07) 20%,
-      rgba(255,255,255,0) 45%,
-      rgba(255,250,244,.10) 72%,
-      rgba(255,250,244,.70) 100%
+      rgba(27,30,49,.14) 0%,
+      rgba(31,34,55,.05) 25%,
+      rgba(255,255,255,0) 52%,
+      rgba(31,34,55,.04) 75%,
+      rgba(27,30,49,.12) 100%
     );
 }
 
