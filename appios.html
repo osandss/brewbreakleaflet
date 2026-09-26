@@ -1485,13 +1485,17 @@ function _initMap(){
   }).setView([40.758, -73.9855],11.2);
 
   const tiles = L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",
-    {
-      subdomains: "abcd",
-      maxZoom: 20,
-      attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
-    }
-  );
+  "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png?key=cb1_32mn_1_c50a8550ac3189af34a5b1e6",
+  {
+    maxZoom: 20,
+    subdomains: "abcd",
+    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+    updateWhenIdle: true,
+    keepBuffer: 6,
+    detectRetina: false,
+    updateWhenZooming: false
+  }
+);
 
   tiles.addTo(map);
 
