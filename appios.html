@@ -19,701 +19,1174 @@
     crossorigin="anonymous"></script>
 
   <style>
+/* =========================================================
+   BREW BREAK — MAP REDESIGN
+   Warm editorial map + floating discovery cards
+========================================================= */
 
-    .leaflet-container {
-      position: relative;
-      background: #efe7dc;
-    }
-    
-    .leaflet-container::before,
-    .leaflet-container::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    
-    .leaflet-container::before {
-      z-index: 250;
-      background: rgba(122, 93, 70, 0.10);
-      mix-blend-mode: multiply;
-    }
-    
-    .leaflet-container::after {
-      z-index: 251;
-      background:
-        linear-gradient(
-          to bottom,
-          rgba(255, 250, 245, 0.10) 0%,
-          rgba(255, 250, 245, 0.03) 40%,
-          rgba(98, 74, 58, 0.06) 100%
-        );
-    }
+:root {
+  --espresso: #33251f;
+  --espresso-deep: #241915;
+  --coffee: #594237;
 
-    .leaflet-tile {
-      filter: sepia(0.22) saturate(0.72) brightness(1.05) contrast(0.88);
-    }
-    
-    .leaflet-tile-pane {
-      opacity: 0.92;
-    }
+  --cream: #fffaf4;
+  --cream-2: #f8efe6;
+  --cream-3: #eee0d3;
 
-    :root {
-      --panel-collapsed: 18vh;
-      --panel-expanded: 38vh;
-    }
+  --taupe: #8d7d73;
+  --muted: #9b8d85;
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overscroll-behavior: none;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-      background: #ffffff;
-      color: #1c1c1e;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      line-height: 1.45;
-      font-size: 12px;
-    }
-    
-    body {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+  --line: rgba(62, 43, 34, 0.10);
+  --shadow: rgba(47, 32, 25, 0.14);
 
-    #filters {
-      position: relative;
-      top: auto;
-      left: auto;
-      right: auto;
-      z-index: 20;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 8px 12px 0;
-      background: transparent;
-    }
+  --map-height: 54vh;
+}
 
-    /* Top row container */
-    #filters-main {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-      padding: 6px 8px;
-      background: rgba(255, 252, 248, 0.94);
-      border: 1px solid rgba(58, 47, 42, 0.10);
-      border-radius: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
+* {
+  box-sizing: border-box;
+}
 
-    #toolbar-actions{
-      position: absolute;
-      right: 16px;
-    
-      /* anchors to bottom of map instead of screen */
-      top: calc(40vh + 8px + 60px);
-    
-      z-index: 3200;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .toolbar-icon-btn{
-      appearance: none;
-      border: 1px solid rgba(58, 47, 42, 0.08);
-      background: rgba(255, 252, 248, 0.92);
-      color: #2d2530;
-    
-      width: 38px;
-      height: 38px;
-      min-width: 38px;
-      padding: 0;
-    
-      border-radius: 999px;
-    
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    
-      cursor: pointer;
-    
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
-    
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    
-    .toolbar-icon-btn:focus-visible{
-      outline:2px solid rgba(58, 47, 42, 0.22);
-      outline-offset:2px;
-    }
-    
-    /* Moment pills container */
-    #moment-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      min-width: 0;
-      flex: 1 1 auto;
-    }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 
-    #moment-bar::-webkit-scrollbar {
-      display: none;
-    }
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    system-ui,
+    sans-serif;
 
-    /* Pills */
-    .moment-pill {
-      appearance: none;
-      border: 1px solid rgba(58, 47, 42, 0.10);
-      background: rgba(255, 255, 255, 0.72);
-      color: #2d2530;
-      padding: 7px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 1;
-      letter-spacing: -0.01em;
-      white-space: nowrap;
-      flex: 0 0 auto;
-      cursor: pointer;
-      transition: background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
-    }
+  background: #fffaf4;
+  color: var(--espresso);
 
-    .moment-pill:hover {
-      transform: translateY(-1px);
-    }
-    
-    .moment-pill.active {
-      background: #3a2f2a; /* espresso tone */
-      border-color: #3a2f2a;
-      color: #fffdf9;
-      box-shadow: 0 5px 14px rgba(58, 47, 42, 0.18);
-    }
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-    .moment-pill:focus-visible {
-      outline: 2px solid rgba(58, 47, 42, 0.22);
-      outline-offset: 2px;
-    }
-
-    
-    /* ═══════════════════════════════════════════════
-       FIX 1: #map uses position:fixed (not absolute).
-       This is the #1 cause of the grey-tile flash and
-       the layout jump — absolute sizing races against
-       iOS's async layout pipeline.
-       ─────────────────────────────────────────────── */
-    #map {
-      position: relative;
-      width: 100%;
-      height: 46vh;
-      min-height: 300px;
-      max-height: 460px;
-      flex: 0 0 auto;
-      background: #efe7dc;
-      will-change: transform;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-    }
-
-    body.map-loading #map {
-      opacity: 0;
-    }
-
-    body.map-ready #map {
-      opacity: 1;
-      transition: opacity 0.18s ease;
-    }
-    
-    @supports (height: 100dvh) {
-      #map {
-        height: 46dvh;
-      }
-    }
-
-    /* Match #map fallback — no grey flash between map div and tiles */
-    .leaflet-container { background: #efe7dc; }
-
-    #bottom-panel {
-      position: relative;
-      flex: 1 1 auto;
-      min-height: 0;
-    
-      background: #FFFBF6;
-      border-top: 1px solid rgba(74, 56, 47, 0.08);
-    
-      border-radius: 22px 22px 0 0;
-      box-shadow: 0 -8px 20px rgba(58, 47, 42, 0.05);
-    
-      display: flex;
-      flex-direction: column;
-      padding: 0 16px calc(12px + env(safe-area-inset-bottom));
-    
-      z-index: 1;
-      overflow: hidden;
-    
-      margin-top: -4px;
-    }
-
-    #bottom-panel.expanded { height: auto; }
-
-    #panel-header {
-      flex: 0 0 auto;
-      padding: 10px 2px 6px;
-    }
-
-    #panel-body {
-      flex: 1 1 auto;
-      min-height: 0;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 4px 0 8px;
-    }
-    
-    #results { padding: 0; }
-
-    #panel-meta-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    #panel-meta-row .active-filters {
-      flex: 1 1 auto;
-      display: none;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 0;
-      padding: 0;
-      position: static;
-      top: auto;
-      background: transparent;
-    }
-
-    #sortBtn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: rgba(28, 28, 30, 0.035);
-      border: 1px solid rgba(28, 28, 30, 0.08);
-      font-size: 11.5px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      color: rgba(28, 28, 30, 0.72);
-      appearance: none;
-      -webkit-appearance: none;
-      outline: none;
-      cursor: default;
-      pointer-events: none;
-      opacity: .85;
-    }
-
-    #panel-toggle {
-      display: none;
-    }
-    
-    #panel-toggle .handle,
-    #panel-toggle .label {
-      display: none;
-    }
-
-    #results-count {
-      flex: 0 0 auto;
-      margin: 0;
-      font-size: 13px;
-      font-weight: 500;
-      color: #5f6368;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-    }
-
-    .card {
-      padding: 0;
-      border-bottom: none;
-      margin-bottom: 0;
-      font-size: 12px;
-      color: #333;
-      line-height: 1.25;
-    }
-    
-    .card:last-child {
-      border-bottom: none;
-    }
-    
-    .featured-card {
-      background: #F7F2EB;
-      border: 1px solid rgba(74, 56, 47, 0.10);
-      border-radius: 22px;
-      padding: 13px;
-      margin: 2px 0 12px;
-      box-shadow: 0 8px 18px rgba(58, 47, 42, 0.06);
-    }
-    
-    .featured-kicker {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #7A6C63;
-      margin-bottom: 6px;
-    }
-    
-    .featured-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    
-    .featured-title {
-      font-size: 17px;
-      font-weight: 650;
-      line-height: 1.08;
-      color: #2F241E;
-      margin: 0 0 3px;
-    }
-    
-    .featured-title.is-link {
-      cursor: pointer;
-    }
-    
-    .featured-title.is-link:hover {
-      text-decoration: underline;
-    }
-    
-    .featured-note {
-      font-size: 13.5px;
-      line-height: 1.32;
-      color: #5f5147;
-      margin: 4px 0 7px;
-    }
-    
-    .featured-location {
-      font-size: 11.5px;
-      line-height: 1.2;
-      color: #8a7a70;
-      margin-bottom: 10px;
-    }
-    
-    .featured-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 2px;
-    }
-    
-    .featured-actions a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 28px;
-      padding: 0 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      text-decoration: none;
-      border: 1px solid rgba(74, 56, 47, 0.10);
-    }
-    
-    .featured-actions a.primary {
-      background: #4A382F;
-      color: #FFF9F3;
-      border-color: #4A382F;
-    }
-    
-    .featured-actions a.secondary {
-      background: #EFE5DA;
-      color: #4A382F;
-    }
-    
-    .results-section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #7A6C63;
-      margin: 2px 0 10px;
-      padding: 0 2px;
-    }
-
-    .explore-rail {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 2px 0 6px;
-      margin-bottom: 4px;
-    }
-    
-    .explore-rail::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .explore-card {
-      flex: 0 0 232px;
-      background: #f8f3ec;
-      border: 1px solid rgba(74, 56, 47, 0.09);
-      border-radius: 20px;
-      padding: 12px 12px 10px;
-      box-shadow: 0 6px 14px rgba(58, 47, 42, 0.05);
-    }
-    
-    .explore-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    
-    .explore-card-name {
-      display: block;
-      font-size: 16px;
-      font-weight: 630;
-      line-height: 1.14;
-      letter-spacing: -0.02em;
-      color: #2f241e;
-      margin: 0 0 5px;
-      cursor: pointer;
-    }
-    
-    .explore-card-name:hover {
-      text-decoration: underline;
-    }
-    
-    .explore-card-address {
-      font-size: 12px;
-      line-height: 1.3;
-      color: #74675f;
-      margin: 0 0 4px;
-    }
-    
-    .explore-card-meta {
-      font-size: 12px;
-      line-height: 1.35;
-      color: #8a7a70;
-    }
-    
-    .explore-card-actions {
-      margin-top: 8px;
-    }
-    
-    .explore-card-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 30px;
-      padding: 0 11px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 620;
-      color: #4A382F;
-      text-decoration: none;
-      background: #efe5da;
-      border: 1px solid rgba(74, 56, 47, 0.08);
-    }
-    
-    .compact-card {
-      padding: 14px 4px;
-      border-bottom: 1px solid rgba(74, 56, 47, 0.08);
-    }
-    
-    .compact-card:last-child {
-      border-bottom: none;
-    }
-    
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 4px;
-    }
-    
-    .card-name {
-      display: block;
-      font-size: 15px;
-      font-weight: 620;
-      margin: 0 0 4px 0;
-      line-height: 1.18;
-      color: #2F241E;
-      cursor: pointer;
-    }
-    
-    .card-name:hover {
-      text-decoration: underline;
-    }
-    
-    .card .meta {
-      margin: 0;
-      line-height: 1.35;
-      color: #6E6259;
-    }
-    
-    #bottom-panel .card p {
-      margin: 0;
-      line-height: 1.32;
-    }
-    
-    #bottom-panel .card a.card-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin: 7px 0 6px;
-      padding: 5px 10px;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: #4A382F;
-      text-decoration: none;
-      background: #EFE5DA;
-      border: 1px solid rgba(74, 56, 47, 0.08);
-      border-radius: 999px;
-    }
-    
-    .fav-btn {
-      background: none;
-      border: 0;
-      padding: 4px;
-      cursor: pointer;
-      font-size: 18px;
-      line-height: 1;
-      color: #C7BCB2;
-    }
-    
-    .fav-btn.is-fav {
-      color: #4A382F;
-    }
-    
-    .leaflet-control-zoom { bottom: 20px; right: 20px; left: auto !important; top: auto !important; }
-
-    .leaflet-top.leaflet-left {
-      top: auto !important;
-      left: auto !important;
-      right: 16px !important;
-      bottom: 24px !important;
-      z-index: 3200 !important;
-    }
-
-    .active-filters { display: none; }
-
-    .filter-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: rgba(28, 28, 30, 0.035);
-      border: 1px solid rgba(28, 28, 30, 0.08);
-      font-size: 11.5px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      color: rgba(28, 28, 30, 0.75);
-    }
-
-    .filter-pill-x {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      background: rgba(28, 28, 30, 0.055);
-      font-weight: 700;
-      font-size: 12px;
-      line-height: 1;
-      color: rgba(28, 28, 30, 0.65);
-      cursor: pointer;
-    }
-
-    body.ss-embed #filters { display: flex !important; }
+body {
+  display: flex;
+  flex-direction: column;
+}
 
 
-    .leaflet-popup-content-wrapper {
-      border-radius: 18px !important;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.18) !important;
-      padding: 0 !important;
-    }
+/* =========================================================
+   MAP
+========================================================= */
 
-    .leaflet-popup-content { margin: 0 !important; width: auto !important; max-width: none !important; }
+#map {
+  position: relative;
+  width: 100%;
+  height: var(--map-height);
+  min-height: 340px;
+  max-height: 570px;
+  flex: 0 0 auto;
 
-    .ss-popup--simple {
-      padding: 12px;
-      min-width: 240px;
-      max-width: 300px;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-      color: #1c1c1e;
-    }
+  background:
+    linear-gradient(
+      180deg,
+      #d7c4b5 0%,
+      #eadfd3 38%,
+      #f5eee6 100%
+    );
 
-    .ss-popup-top { display: flex; gap: 12px; align-items: flex-start; }
-    .ss-popup-text { flex: 1; min-width: 0; }
-    .ss-popup-img-wrap { margin: 0; flex: 0 0 104px; display: block; }
+  overflow: hidden;
 
-    .ss-popup-img {
-      width: 104px;
-      height: 78px;
-      max-height: none;
-      object-fit: cover;
-      border-radius: 12px;
-      display: block;
-    }
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
 
-    .ss-popup--simple .ss-popup-title { font-size: 13px; font-weight: 700; line-height: 1.2; margin: 0 0 4px; }
-    .ss-popup--simple .ss-popup-tags { font-size: 11px; color: rgba(28,28,30,0.55); line-height: 1.2; margin: 0 0 6px; }
-    .ss-popup--simple .ss-popup-meta { font-size: 11px; color: rgba(28,28,30,0.65); line-height: 1.25; margin: 0 0 8px; }
+@supports (height: 100dvh) {
+  #map {
+    height: 54dvh;
+  }
+}
 
-    .ss-popup--simple .ss-popup-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: nowrap;
-      align-items: center;
-      margin-top: 6px;
-    }
+body.map-loading #map {
+  opacity: 0;
+}
 
-    .ss-popup--simple .ss-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 1;
-      padding: 5px 9px;
-      border-radius: 999px;
-      color: #1c1c1e;
-      text-decoration: none;
-      background: rgba(28,28,30,0.06);
-      border: 1px solid rgba(28,28,30,0.08);
-      white-space: nowrap;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.15s ease, transform 0.15s ease;
-    }
+body.map-ready #map {
+  opacity: 1;
+  transition: opacity .28s ease;
+}
 
-    .ss-popup--simple .ss-pill.secondary { background: rgba(28,28,30,0.03); }
-    .ss-popup--simple .ss-pill:active { background: rgba(28,28,30,0.12); transform: scale(0.97); }
 
-    .leaflet-container a.leaflet-popup-close-button {
-      width: 26px !important; height: 26px !important;
-      font-size: 18px !important; line-height: 26px !important;
-      color: rgba(28,28,30,0.45) !important;
-      right: 6px !important; top: 6px !important;
-    }
+/* =========================================================
+   LEAFLET MAP COLOR TREATMENT
+========================================================= */
 
-    
-  </style>
+.leaflet-container {
+  position: relative;
+  background: #e8ddd2;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    system-ui,
+    sans-serif;
+}
+
+/*
+   The map should feel atmospheric, not like a stock map.
+*/
+.leaflet-tile {
+  filter:
+    sepia(.28)
+    saturate(.55)
+    brightness(1.03)
+    contrast(.82);
+}
+
+.leaflet-tile-pane {
+  opacity: .91;
+}
+
+
+/* Warm overall wash */
+
+.leaflet-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  z-index: 245;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(70, 47, 36, .24) 0%,
+      rgba(100, 73, 58, .13) 20%,
+      rgba(220, 202, 187, .04) 48%,
+      rgba(255, 249, 242, .16) 75%,
+      rgba(255, 250, 244, .54) 100%
+    );
+
+  mix-blend-mode: multiply;
+}
+
+
+/*
+   Atmospheric top/bottom fade.
+   This creates the ombré look from the Brew Break concept.
+*/
+
+.leaflet-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  z-index: 246;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 36%,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0) 42%,
+      rgba(255,249,242,.10) 74%,
+      rgba(255,249,242,.28) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(61, 42, 33, .20) 0%,
+      rgba(61, 42, 33, .07) 20%,
+      rgba(255,255,255,0) 45%,
+      rgba(255,250,244,.10) 72%,
+      rgba(255,250,244,.70) 100%
+    );
+}
+
+
+/* =========================================================
+   MOMENT FILTERS
+   Now FLOATING OVER the map
+========================================================= */
+
+#filters {
+  position: absolute;
+
+  top: 12px;
+  left: 0;
+  right: 0;
+
+  z-index: 3000;
+
+  padding: 0 14px;
+
+  pointer-events: none;
+}
+
+#filters-main {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 0;
+
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+
+  pointer-events: auto;
+}
+
+#moment-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  width: 100%;
+
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  padding: 2px 2px 10px;
+}
+
+#moment-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.moment-pill {
+  appearance: none;
+  -webkit-appearance: none;
+
+  flex: 0 0 auto;
+
+  min-height: 34px;
+
+  padding: 0 15px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(73, 52, 42, .10);
+
+  background: rgba(255, 249, 243, .90);
+
+  color: rgba(57, 41, 34, .76);
+
+  font-size: 12px;
+  font-weight: 650;
+
+  letter-spacing: -.01em;
+
+  white-space: nowrap;
+
+  box-shadow:
+    0 5px 16px rgba(56, 38, 29, .08),
+    inset 0 1px 0 rgba(255,255,255,.55);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  cursor: pointer;
+
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    color .18s ease,
+    box-shadow .18s ease;
+}
+
+.moment-pill:active {
+  transform: scale(.96);
+}
+
+.moment-pill.active {
+  background: rgba(55, 39, 32, .94);
+  border-color: rgba(55, 39, 32, .94);
+
+  color: #fffaf5;
+
+  box-shadow:
+    0 7px 20px rgba(45, 30, 24, .18),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+
+/* =========================================================
+   RIGHT MAP CONTROLS
+========================================================= */
+
+#toolbar-actions {
+  position: absolute;
+
+  right: 14px;
+  top: calc(var(--map-height) - 96px);
+
+  z-index: 3200;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toolbar-icon-btn {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(70, 50, 40, .09);
+
+  background: rgba(255, 250, 245, .94);
+
+  color: #3c2b24;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  box-shadow:
+    0 7px 20px rgba(51, 34, 27, .12),
+    inset 0 1px 0 rgba(255,255,255,.7);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  cursor: pointer;
+
+  transition: transform .15s ease;
+}
+
+.toolbar-icon-btn:active {
+  transform: scale(.92);
+}
+
+@supports (height: 100dvh) {
+  #toolbar-actions {
+    top: calc(54dvh - 96px);
+  }
+}
+
+
+/* =========================================================
+   BOTTOM DISCOVERY SHEET
+========================================================= */
+
+#bottom-panel {
+  position: relative;
+
+  flex: 1 1 auto;
+  min-height: 0;
+
+  margin-top: -24px;
+
+  z-index: 500;
+
+  display: flex;
+  flex-direction: column;
+
+  padding:
+    0
+    0
+    calc(10px + env(safe-area-inset-bottom));
+
+  background:
+    linear-gradient(
+      180deg,
+      #fffaf5 0%,
+      #fffaf6 45%,
+      #fffdf9 100%
+    );
+
+  border-radius: 28px 28px 0 0;
+
+  border-top:
+    1px solid rgba(75, 54, 44, .07);
+
+  box-shadow:
+    0 -12px 40px rgba(53, 36, 28, .10);
+
+  overflow: hidden;
+}
+
+
+/* little sheet handle */
+
+#bottom-panel::before {
+  content: "";
+
+  display: block;
+
+  width: 34px;
+  height: 4px;
+
+  margin: 9px auto 2px;
+
+  border-radius: 999px;
+
+  background: rgba(65, 47, 39, .15);
+
+  flex: 0 0 auto;
+}
+
+
+#panel-header {
+  flex: 0 0 auto;
+
+  padding: 5px 18px 7px;
+}
+
+#panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  -webkit-overflow-scrolling: touch;
+
+  padding: 0 0 10px;
+}
+
+#results {
+  padding: 0;
+}
+
+
+/* =========================================================
+   RESULTS HEADER
+========================================================= */
+
+#panel-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+#panel-meta-row .active-filters {
+  flex: 1 1 auto;
+
+  display: none;
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin: 0;
+  padding: 0;
+}
+
+#panel-meta-row > div:last-child {
+  width: 100%;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  gap: 8px !important;
+}
+
+#sortBtn {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 27px;
+
+  padding: 0 10px;
+
+  border-radius: 999px;
+
+  background: #f2e8de;
+
+  border: 1px solid rgba(70, 50, 40, .08);
+
+  color: #77675e;
+
+  font-size: 10.5px;
+  font-weight: 700;
+
+  letter-spacing: .03em;
+
+  pointer-events: none;
+}
+
+#results-count {
+  margin: 0;
+
+  font-size: 12.5px;
+  font-weight: 600;
+
+  color: #7d6e66;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   FEATURED VENUE
+========================================================= */
+
+.card {
+  color: var(--espresso);
+}
+
+.featured-card {
+  position: relative;
+
+  margin: 4px 16px 15px;
+
+  padding: 17px 17px 16px;
+
+  border-radius: 23px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f8eee4 0%,
+      #f4e9de 100%
+    );
+
+  border:
+    1px solid rgba(73, 52, 42, .08);
+
+  box-shadow:
+    0 8px 24px rgba(58, 39, 30, .07),
+    inset 0 1px 0 rgba(255,255,255,.72);
+
+  overflow: hidden;
+}
+
+
+/* subtle coffee glow */
+
+.featured-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  right: -80px;
+  top: -95px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(136, 101, 79, .10),
+      rgba(136, 101, 79, 0) 70%
+    );
+
+  pointer-events: none;
+}
+
+
+.featured-kicker {
+  margin-bottom: 7px;
+
+  color: #8a7569;
+
+  font-size: 9.5px;
+  font-weight: 750;
+
+  letter-spacing: .16em;
+
+  text-transform: uppercase;
+}
+
+.featured-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.featured-title {
+  margin: 0 0 6px;
+
+  color: #30221c;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  line-height: 1.08;
+
+  letter-spacing: -.035em;
+}
+
+.featured-title.is-link {
+  cursor: pointer;
+}
+
+.featured-note {
+  max-width: 270px;
+
+  margin: 0 0 7px;
+
+  color: #695950;
+
+  font-size: 12.5px;
+
+  line-height: 1.38;
+}
+
+.featured-location {
+  margin-bottom: 11px;
+
+  color: #97877e;
+
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.featured-actions {
+  display: flex;
+  gap: 7px;
+
+  margin-top: 3px;
+}
+
+.featured-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 31px;
+
+  padding: 0 13px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 650;
+
+  text-decoration: none;
+}
+
+.featured-actions a.primary {
+  background: #463229;
+
+  border: 1px solid #463229;
+
+  color: #fffaf5;
+
+  box-shadow:
+    0 4px 10px rgba(57, 39, 31, .12);
+}
+
+
+/* =========================================================
+   KEEP EXPLORING
+========================================================= */
+
+.results-section-label {
+  margin: 0 18px 9px;
+
+  color: #897970;
+
+  font-size: 9.5px;
+  font-weight: 750;
+
+  letter-spacing: .16em;
+
+  text-transform: uppercase;
+}
+
+.explore-rail {
+  display: flex;
+
+  gap: 10px;
+
+  overflow-x: auto;
+
+  padding:
+    2px
+    16px
+    12px;
+
+  margin: 0;
+
+  scrollbar-width: none;
+
+  -webkit-overflow-scrolling: touch;
+
+  scroll-snap-type: x proximity;
+}
+
+.explore-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.explore-card {
+  position: relative;
+
+  flex: 0 0 220px;
+
+  min-height: 138px;
+
+  padding: 14px;
+
+  border-radius: 21px;
+
+  background: rgba(249, 242, 234, .90);
+
+  border:
+    1px solid rgba(72, 52, 42, .08);
+
+  box-shadow:
+    0 6px 18px rgba(54, 37, 29, .055);
+
+  scroll-snap-align: start;
+}
+
+.explore-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.explore-card-name {
+  display: block;
+
+  margin: 0 0 5px;
+
+  color: #33251f;
+
+  font-size: 15px;
+  font-weight: 680;
+
+  line-height: 1.12;
+
+  letter-spacing: -.025em;
+
+  cursor: pointer;
+}
+
+.explore-card-address {
+  margin-bottom: 5px;
+
+  color: #786961;
+
+  font-size: 11px;
+
+  line-height: 1.32;
+}
+
+.explore-card-meta {
+  color: #9a8a81;
+
+  font-size: 10.5px;
+
+  line-height: 1.3;
+}
+
+.explore-card-actions {
+  margin-top: 9px;
+}
+
+.explore-card-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 28px;
+
+  padding: 0 11px;
+
+  border-radius: 999px;
+
+  background: #eee1d5;
+
+  border:
+    1px solid rgba(70, 50, 40, .06);
+
+  color: #4d382e;
+
+  font-size: 10.5px;
+  font-weight: 650;
+
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+.fav-btn {
+  position: relative;
+  z-index: 3;
+
+  appearance: none;
+
+  border: 0;
+  background: transparent;
+
+  padding: 2px;
+
+  color: #c5b6ab;
+
+  font-size: 19px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    color .16s ease,
+    transform .16s ease;
+}
+
+.fav-btn:active {
+  transform: scale(.86);
+}
+
+.fav-btn.is-fav {
+  color: #50392e;
+}
+
+
+/* =========================================================
+   ACTIVE FILTER
+========================================================= */
+
+.active-filters {
+  display: none;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  background: #f1e6dc;
+
+  color: #75655c;
+
+  font-size: 10.5px;
+  font-weight: 650;
+}
+
+.filter-pill-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 15px;
+  height: 15px;
+
+  border-radius: 50%;
+
+  background: rgba(64, 46, 38, .06);
+
+  color: #75655c;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   POPUP — BREW BREAK CARD
+========================================================= */
+
+.leaflet-popup {
+  margin-bottom: 10px;
+}
+
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+
+  border-radius: 20px !important;
+
+  background:
+    rgba(255, 250, 245, .97) !important;
+
+  border:
+    1px solid rgba(73, 52, 42, .08);
+
+  box-shadow:
+    0 18px 45px rgba(46, 30, 23, .18) !important;
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.leaflet-popup-content {
+  width: auto !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+}
+
+.leaflet-popup-tip {
+  background: #fffaf5 !important;
+
+  box-shadow: none !important;
+}
+
+.ss-popup--simple {
+  min-width: 220px;
+  max-width: 270px;
+
+  padding: 14px;
+
+  color: #33251f;
+}
+
+.ss-popup-top {
+  display: flex;
+
+  gap: 11px;
+
+  align-items: flex-start;
+}
+
+.ss-popup-text {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.ss-popup-img-wrap {
+  display: block;
+
+  flex: 0 0 78px;
+
+  margin: 0;
+}
+
+.ss-popup-img {
+  display: block;
+
+  width: 78px;
+  height: 70px;
+
+  object-fit: cover;
+
+  border-radius: 13px;
+}
+
+.ss-popup--simple .ss-popup-title {
+  margin: 0 0 4px;
+
+  color: #30221c;
+
+  font-size: 13.5px;
+  font-weight: 700;
+
+  line-height: 1.18;
+
+  letter-spacing: -.02em;
+}
+
+.ss-popup--simple .ss-popup-tags {
+  margin: 0 0 5px;
+
+  color: #8c7c72;
+
+  font-size: 10.5px;
+
+  line-height: 1.2;
+}
+
+.ss-popup--simple .ss-popup-meta {
+  margin: 0 0 8px;
+
+  color: #6f6058;
+
+  font-size: 10.5px;
+
+  line-height: 1.28;
+}
+
+.ss-popup--simple .ss-popup-actions {
+  display: flex;
+
+  gap: 6px;
+
+  align-items: center;
+
+  margin-top: 6px;
+}
+
+.ss-popup--simple .ss-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 27px;
+
+  padding: 0 10px;
+
+  border-radius: 999px;
+
+  background: #49352b;
+
+  border: 1px solid #49352b;
+
+  color: #fffaf5;
+
+  font-size: 10px;
+  font-weight: 650;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+}
+
+.ss-popup--simple .ss-pill.secondary {
+  background: #eee2d7;
+
+  border-color:
+    rgba(72, 51, 41, .07);
+
+  color: #4d392f;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  top: 5px !important;
+  right: 5px !important;
+
+  width: 26px !important;
+  height: 26px !important;
+
+  color: rgba(55, 39, 32, .42) !important;
+
+  font-size: 18px !important;
+
+  line-height: 25px !important;
+}
+
+
+/* =========================================================
+   HIDE DEFAULT LEAFLET CONTROLS
+========================================================= */
+
+.leaflet-control-zoom {
+  display: none !important;
+}
+
+.leaflet-control-attribution {
+  opacity: .38;
+
+  font-size: 7px !important;
+
+  background:
+    rgba(255,250,245,.58) !important;
+}
+
+
+/* =========================================================
+   USER LOCATION
+========================================================= */
+
+.leaflet-interactive {
+  transition:
+    fill .2s ease,
+    stroke .2s ease;
+}
+
+
+/* =========================================================
+   UNUSED LEGACY ELEMENTS
+========================================================= */
+
+#panel-toggle,
+#panel-toggle .handle,
+#panel-toggle .label {
+  display: none;
+}
+
+.compact-card,
+.card-top,
+.card-name,
+.card .meta,
+#bottom-panel .card p,
+#bottom-panel .card a.card-link {
+  /* retained so old JS never breaks */
+}
+
+
+/* =========================================================
+   EMBED MODE
+========================================================= */
+
+body.ss-embed #filters {
+  display: flex !important;
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 390px) {
+
+  :root {
+    --map-height: 52vh;
+  }
+
+  #map {
+    min-height: 320px;
+  }
+
+  .moment-pill {
+    min-height: 32px;
+
+    padding: 0 13px;
+
+    font-size: 11.5px;
+  }
+
+  .featured-card {
+    margin-left: 13px;
+    margin-right: 13px;
+  }
+
+  .explore-rail {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+
+  .explore-card {
+    flex-basis: 205px;
+  }
+
+  #toolbar-actions {
+    right: 12px;
+
+    top: calc(var(--map-height) - 92px);
+  }
+}
+</style>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W6LRN7EDH7"></script>
   <script>
@@ -1317,7 +1790,11 @@ function renderList(data){
   const featuredWeb = normalizeUrl(featured.website);
 
   featuredCard.innerHTML = `
-    <div class="featured-kicker">Your best pick</div>
+    <div class="featured-kicker">
+      ${currentMoment === "all"
+        ? "Start here"
+        : `For ${currentMoment}`}
+    </div>
     <div class="featured-top">
       <div style="flex:1;min-width:0;">
         <div class="featured-title is-link" data-focus-id="${featured.id}">${featured.name}</div>
@@ -1432,8 +1909,15 @@ function applyFiltersUnified(){
       fitInitialView();
     } else if (count > 0 && bounds) {
       map.fitBounds(bounds, {
-        paddingTopLeft: [16, window.SipSober?.isEmbed ? 80 : 120],
-        paddingBottomRight: [16, panelH + 40],
+        paddingTopLeft: [
+          22,
+          window.SipSober?.isEmbed ? 68 : 105
+        ],
+        
+        paddingBottomRight: [
+          22,
+          Math.min(panelH, 190) + 34
+        ],
         maxZoom: 16,
         animate: false
       });
@@ -1522,8 +2006,8 @@ function fitInitialView(){
   );
 
   map.fitBounds(defaultBounds, {
-    paddingTopLeft: [16, window.SipSober?.isEmbed ? 75 : 115],
-    paddingBottomRight: [16, panelH + 30],
+    paddingTopLeft: [22, window.SipSober?.isEmbed ? 68 : 105],
+    paddingBottomRight: [22, Math.min(panelH, 190) + 34],
     maxZoom: 12.4,
     animate: false
   });
@@ -1661,7 +2145,9 @@ document.addEventListener("click", e => {
     return;
   }
 
-  const nameEl = e.target.closest(".card-name[data-focus-id]");
+  const nameEl = e.target.closest(
+    ".card-name[data-focus-id], .featured-title[data-focus-id], .explore-card-name[data-focus-id]"
+  );
   if (nameEl) {
     e.preventDefault();
     e.stopPropagation();
