@@ -536,262 +536,237 @@ body.map-ready #map {
 
 
 /* =========================================================
-   FEATURED VENUE
+   MAP SUMMARY / PLAN PANEL
 ========================================================= */
 
-.card {
-  color: var(--espresso);
+.map-summary-card {
+  padding: 10px 20px 20px;
 }
 
-.featured-card {
-  position: relative;
+.map-summary-eyebrow,
+.selected-venue-eyebrow {
+  margin-bottom: 8px;
 
-  margin: 4px 16px 15px;
-
-  padding: 17px 17px 16px;
-
-  border-radius: 23px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ECEEF4 0%,
-      #E7E9F0 100%
-    );
-
-  border:
-    1px solid rgba(31, 34, 55, .08);
-
-  box-shadow:
-    0 8px 24px rgba(27, 30, 49, .07),
-    inset 0 1px 0 rgba(255,255,255,.72);
-
-  overflow: hidden;
-}
-
-
-/* subtle coffee glow */
-
-.featured-card::after {
-  content: "";
-
-  position: absolute;
-
-  width: 170px;
-  height: 170px;
-
-  right: -80px;
-  top: -95px;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(66, 72, 105, .10),
-      rgba(136, 101, 79, 0) 70%
-    );
-
-  pointer-events: none;
-}
-
-
-.featured-kicker {
-  margin-bottom: 7px;
-  color: #747A91;
+  color: rgba(61, 47, 41, .54);
 
   font-size: 9.5px;
   font-weight: 750;
 
-  letter-spacing: .16em;
+  letter-spacing: .15em;
   text-transform: uppercase;
 }
 
-.featured-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.featured-title {
+.map-summary-title {
   margin: 0 0 6px;
-  color: #1B1E31;
 
-  font-size: 19px;
+  color: #30241F;
+
+  font-size: 22px;
   font-weight: 700;
 
   line-height: 1.08;
   letter-spacing: -.035em;
 }
 
-.featured-title.is-link {
-  cursor: pointer;
-}
+.map-summary-copy {
+  max-width: 310px;
 
-.featured-note {
-  max-width: 270px;
-  margin: 0 0 7px;
+  margin: 0 0 17px;
 
-  color: #555B70;
+  color: rgba(61, 47, 41, .62);
+
   font-size: 12.5px;
-  line-height: 1.38;
+  line-height: 1.42;
 }
 
-.featured-location {
-  margin-bottom: 11px;
-  color: #858A9B;
 
-  font-size: 11.5px;
-  font-weight: 500;
-}
+/* Make a Plan */
 
-.featured-actions {
+.make-plan-btn {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 100%;
+  min-height: 46px;
+
+  padding: 0 16px;
+
   display: flex;
-  gap: 7px;
-  margin-top: 3px;
-}
-
-.featured-actions a {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
-  height: 31px;
-  padding: 0 13px;
-  border-radius: 999px;
+  border: 0;
+  border-radius: 15px;
 
-  font-size: 11px;
+  background: #30241F;
+  color: #FFF9F3;
+
+  font-family: inherit;
+
+  font-size: 13px;
   font-weight: 650;
-  text-decoration: none;
+
+  letter-spacing: -.01em;
+
+  box-shadow:
+    0 7px 18px rgba(48, 36, 31, .16),
+    inset 0 1px 0 rgba(255,255,255,.07);
+
+  cursor: pointer;
+
+  transition:
+    transform .16s ease,
+    box-shadow .16s ease,
+    background .16s ease;
 }
 
-.featured-actions a.primary {
-  background: #1F2237;
-  border: 1px solid #1F2237;
-  color: #FFFFFF;
+.make-plan-btn:active {
+  transform: scale(.985);
+
   box-shadow:
-    0 4px 10px rgba(27, 30, 49, .16);
+    0 3px 10px rgba(48, 36, 31, .12);
+}
+
+.make-plan-arrow {
+  font-size: 17px;
+  font-weight: 400;
+
+  opacity: .82;
 }
 
 
 /* =========================================================
-   KEEP EXPLORING
+   SELECTED VENUE
 ========================================================= */
 
-.results-section-label {
-  margin: 0 18px 9px;
-  color: #747A8E;
-
-  font-size: 9.5px;
-  font-weight: 750;
-
-  letter-spacing: .16em;
-  text-transform: uppercase;
+.selected-venue-card {
+  padding: 10px 20px 20px;
 }
 
-.explore-rail {
-  display: flex;
-
-  gap: 10px;
-
-  overflow-x: auto;
-
-  padding:
-    2px
-    16px
-    12px;
-
-  margin: 0;
-
-  scrollbar-width: none;
-
-  -webkit-overflow-scrolling: touch;
-
-  scroll-snap-type: x proximity;
-}
-
-.explore-rail::-webkit-scrollbar {
-  display: none;
-}
-
-.explore-card {
-  position: relative;
-  flex: 0 0 220px;
-
-  min-height: 138px;
-  padding: 14px;
-  border-radius: 21px;
-
-  background: rgba(242, 243, 248, .96);
-
-  border:
-    1px solid rgba(31, 34, 55, .07);
-  
-  box-shadow:
-    0 6px 18px rgba(27, 30, 49, .055);
-
-  scroll-snap-align: start;
-}
-
-.explore-card-top {
+.selected-venue-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 8px;
+  gap: 14px;
 }
 
-.explore-card-name {
-  display: block;
+.selected-venue-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.selected-venue-name {
   margin: 0 0 5px;
 
-  color: #1B1E31;
+  color: #30241F;
 
-  font-size: 15px;
-  font-weight: 680;
+  font-size: 21px;
+  font-weight: 700;
 
-  line-height: 1.12;
-  letter-spacing: -.025em;
-  cursor: pointer;
+  line-height: 1.08;
+  letter-spacing: -.035em;
 }
 
-.explore-card-address {
-  margin-bottom: 5px;
-  color: #656A7D;
+.selected-venue-meta {
+  margin-bottom: 8px;
+
+  color: rgba(61, 47, 41, .50);
+
   font-size: 11px;
-  line-height: 1.32;
+  font-weight: 550;
 }
 
-.explore-card-meta {
-  color: #8A8FA0;
-  font-size: 10.5px;
-  line-height: 1.3;
+.selected-venue-note {
+  max-width: 300px;
+
+  color: rgba(61, 47, 41, .66);
+
+  font-size: 12.5px;
+  line-height: 1.4;
 }
 
-.explore-card-actions {
-  margin-top: 9px;
+.selected-fav {
+  flex: 0 0 auto;
+
+  margin-top: -2px;
+
+  color: rgba(61, 47, 41, .28);
 }
 
-.explore-card-link {
+.selected-fav.is-fav {
+  color: #30241F;
+}
+
+
+/* Venue actions */
+
+.selected-venue-actions {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+.selected-venue-secondary,
+.selected-venue-plan {
+  appearance: none;
+  -webkit-appearance: none;
+
+  min-height: 43px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  min-height: 28px;
-  padding: 0 11px;
-  border-radius: 999px;
-  background: #E4E6EE;
+  border-radius: 14px;
 
-  border:
-    1px solid rgba(31, 34, 55, .06);
+  font-family: inherit;
 
-  color: #34384D;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 650;
 
   text-decoration: none;
+
+  cursor: pointer;
 }
+
+.selected-venue-secondary {
+  flex: 0 0 auto;
+
+  padding: 0 17px;
+
+  background: rgba(255, 250, 245, .58);
+
+  border: 1px solid rgba(61, 47, 41, .09);
+
+  color: #4A3931;
+}
+
+.selected-venue-plan {
+  flex: 1;
+
+  padding: 0 15px;
+
+  justify-content: space-between;
+
+  background: #30241F;
+
+  border: 1px solid #30241F;
+
+  color: #FFF9F3;
+
+  box-shadow:
+    0 6px 16px rgba(48, 36, 31, .14);
+}
+
+.selected-venue-secondary:active,
+.selected-venue-plan:active {
+  transform: scale(.98);
+}
+
+
 
 
 /* =========================================================
@@ -1133,19 +1108,6 @@ body.ss-embed #filters {
     padding: 4px;
   }
 
-  .featured-card {
-    margin-left: 13px;
-    margin-right: 13px;
-  }
-
-  .explore-rail {
-    padding-left: 13px;
-    padding-right: 13px;
-  }
-
-  .explore-card {
-    flex-basis: 205px;
-  }
 
   #toolbar-actions {
     right: 12px;
@@ -1193,14 +1155,8 @@ body.ss-embed #filters {
       <span class="handle" aria-hidden="true"></span>
       <span class="label">Show</span>
     </button>
-    <div id="panel-meta-row">
-      <div id="active-filters" class="active-filters"></div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button id="sortBtn" type="button">A–Z</button>
-        <div id="results-count" class="results-count"></div>
-      </div>
-    </div>
   </div>
+
   <div id="panel-body">
     <div id="results"></div>
   </div>
@@ -1503,7 +1459,11 @@ function _initMap(){
     setTimeout(kickSize, 150);
   });
 
-  map.on("popupclose",()=>{ clearActiveMarker(); _lastFocusedVenueId=null; });
+  map.on("popupclose", () => {
+    clearActiveMarker();
+    _lastFocusedVenueId = null;
+    applyFiltersUnified();
+  });
 
   _buildIcons();
   applyIconForViewport();
@@ -1725,7 +1685,10 @@ function renderMarkers(data){
   const bounds=L.latLngBounds([]);
   data.forEach(loc=>{
     const m=L.marker([loc.lat,loc.lng]).addTo(markersLayer);
-    m.on("click",()=>setActiveMarker(m));
+    m.on("click", () => {
+      setActiveMarker(m);
+      renderSelectedVenue(loc);
+    });
     if(loc.id) markersById[String(loc.id)]=m;
     const imgHtml=loc.imageUrl?`<div class="ss-popup-img-wrap"><img class="ss-popup-img" src="${loc.imageUrl}" alt="${loc.name||""}" loading="lazy" onerror="this.closest('.ss-popup-img-wrap')?.remove()"></div>`:"";
     const web=normalizeUrl(loc.website);
@@ -1738,89 +1701,158 @@ function renderMarkers(data){
 function renderList(data){
   const results = document.getElementById("results");
   const rc = document.getElementById("results-count");
+
   if (!results) return;
 
   results.innerHTML = "";
 
   if (rc) {
     rc.textContent = data.length === 0
-      ? "No places found"
-      : `${data.length} place${data.length === 1 ? "" : "s"}`;
+      ? "No spots"
+      : `${data.length} spot${data.length === 1 ? "" : "s"}`;
   }
 
   if (!data.length) {
+    results.innerHTML = `
+      <div class="map-summary-card">
+        <div class="map-summary-eyebrow">No matches</div>
+
+        <div class="map-summary-title">
+          Try another moment
+        </div>
+
+        <div class="map-summary-copy">
+          Switch the filter above to explore more coffee spots.
+        </div>
+      </div>
+    `;
+
     return;
   }
 
-  const featured = data[0];
-  const rest = data.slice(1);
+  let eyebrow = "Explore NYC";
+  let title = `${data.length} coffee spots`;
+  let copy = "Explore the map or choose a moment to find the right spot.";
 
-  const featuredCard = document.createElement("div");
-  featuredCard.className = "card featured-card";
+  if (currentMoment !== "all") {
+    const label =
+      currentMoment.charAt(0).toUpperCase() +
+      currentMoment.slice(1);
 
-  const featuredWeb = normalizeUrl(featured.website);
+    eyebrow = `${label} moment`;
+    title = `${data.length} ${currentMoment} spot${data.length === 1 ? "" : "s"}`;
+    copy = "Explore the pins or turn this coffee break into a plan.";
+  }
 
-  featuredCard.innerHTML = `
-    <div class="featured-kicker">
-      ${currentMoment === "all"
-        ? "Start here"
-        : `For ${currentMoment}`}
-    </div>
-    <div class="featured-top">
-      <div style="flex:1;min-width:0;">
-        <div class="featured-title is-link" data-focus-id="${featured.id}">${featured.name}</div>
-        ${featured.moment_note ? `<div class="featured-note">${featured.moment_note}</div>` : ""}
-        ${featured.neighborhood ? `<div class="featured-location">${featured.neighborhood}</div>` : ""}
-        <div class="featured-actions">
-          ${featuredWeb ? `<a class="primary" href="${featuredWeb}" target="_blank" rel="noopener">Website</a>` : ""}
-        </div>
+  results.innerHTML = `
+    <div class="map-summary-card">
+
+      <div class="map-summary-eyebrow">
+        ${eyebrow}
       </div>
-      <button class="fav-btn" data-id="${featured.id}" aria-label="Favorite">★</button>
+
+      <div class="map-summary-title">
+        ${title}
+      </div>
+
+      <div class="map-summary-copy">
+        ${copy}
+      </div>
+
+      <button
+        class="make-plan-btn"
+        type="button"
+        data-action="make-plan"
+      >
+        <span>Make a Plan</span>
+        <span class="make-plan-arrow">→</span>
+      </button>
+
     </div>
   `;
 
-  results.appendChild(featuredCard);
-
-  if (rest.length) {
-    const label = document.createElement("div");
-    label.className = "results-section-label";
-    label.textContent = "Keep exploring";
-    results.appendChild(label);
-
-    const rail = document.createElement("div");
-    rail.className = "explore-rail";
-
-    rest.slice(0, 6).forEach(loc => {
-      const card = document.createElement("div");
-      card.className = "explore-card";
-
-      const web = normalizeUrl(loc.website);
-      const metaLine = [_distanceLabelForVenue(loc), loc.neighborhood || ""]
-        .filter(Boolean)
-        .join(" • ");
-
-      card.innerHTML = `
-        <div class="explore-card-top">
-          <div style="flex:1;min-width:0;">
-            <span class="explore-card-name" data-focus-id="${loc.id}">${loc.name}</span>
-            <div class="explore-card-address">${loc.address || ""}</div>
-            <div class="explore-card-meta">${metaLine}</div>
-          </div>
-          <button class="fav-btn" data-id="${loc.id}" aria-label="Favorite">★</button>
-        </div>
-        <div class="explore-card-actions">
-          ${web ? `<a class="explore-card-link" href="${web}" target="_blank" rel="noopener">Website</a>` : ""}
-        </div>
-      `;
-
-      rail.appendChild(card);
-    });
-
-    results.appendChild(rail);
-  }
-
   window.SipSober?.sendVenuesToNative?.(data);
 }
+
+function renderSelectedVenue(loc){
+  const results = document.getElementById("results");
+
+  if (!results || !loc) return;
+
+  const web = normalizeUrl(loc.website);
+  const distance = _distanceLabelForVenue(loc);
+
+  const meta = [
+    distance,
+    loc.neighborhood
+  ]
+    .filter(Boolean)
+    .join(" • ");
+
+  results.innerHTML = `
+    <div class="selected-venue-card">
+
+      <div class="selected-venue-eyebrow">
+        Selected spot
+      </div>
+
+      <div class="selected-venue-top">
+
+        <div class="selected-venue-info">
+
+          <div class="selected-venue-name">
+            ${loc.name || ""}
+          </div>
+
+          ${meta
+            ? `<div class="selected-venue-meta">${meta}</div>`
+            : ""}
+
+          ${loc.moment_note
+            ? `<div class="selected-venue-note">${loc.moment_note}</div>`
+            : ""}
+
+        </div>
+
+        <button
+          class="fav-btn selected-fav"
+          data-id="${loc.id}"
+          aria-label="Favorite"
+        >
+          ★
+        </button>
+
+      </div>
+
+      <div class="selected-venue-actions">
+
+        ${web
+          ? `
+            <a
+              class="selected-venue-secondary"
+              href="${web}"
+              target="_blank"
+              rel="noopener"
+            >
+              Website
+            </a>
+          `
+          : ""}
+
+        <button
+          class="selected-venue-plan"
+          type="button"
+          data-plan-venue="${loc.id}"
+        >
+          <span>Plan Here</span>
+          <span>→</span>
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}  
 
 /* ─── FILTER + APPLY ────────────────────────────────────────────── */
 function applyFiltersUnified(){
@@ -2068,8 +2100,17 @@ window.SipSober.focusVenue = function(payload){
 
     setTimeout(() => {
       setActiveMarker(marker);
+    
+      const loc = locations.find(
+        x => String(x.id) === String(id)
+      );
+    
+      if (loc) {
+        renderSelectedVenue(loc);
+      }
+    
       marker.openPopup();
-
+    
       const c = document.querySelector(".leaflet-popup-close-button");
       if (c) c.addEventListener("click", () => { _lastFocusedVenueId = null; }, { once: true });
     }, 200);
