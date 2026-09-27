@@ -608,6 +608,135 @@ body.map-ready #map {
   opacity: .82;
 }
 
+/* =========================================================
+   BROWSE VENUES
+========================================================= */
+
+.venue-browser {
+  padding: 0 20px 22px;
+}
+
+.venue-browser-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.venue-browse-card {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 100%;
+  padding: 14px 15px;
+
+  display: block;
+
+  border: 1px solid rgba(61, 47, 41, .08);
+  border-radius: 16px;
+
+  background: rgba(255, 250, 245, .48);
+
+  font-family: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 10px rgba(48, 36, 31, .035),
+    inset 0 1px 0 rgba(255,255,255,.35);
+
+  transition:
+    transform .16s ease,
+    background .16s ease,
+    box-shadow .16s ease;
+}
+
+.venue-browse-card:active {
+  transform: scale(.985);
+
+  background: rgba(255, 250, 245, .68);
+
+  box-shadow:
+    0 2px 6px rgba(48, 36, 31, .04);
+}
+
+.venue-browse-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.venue-browse-name {
+  min-width: 0;
+
+  color: #30241F;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+
+.venue-browse-arrow {
+  flex: 0 0 auto;
+
+  color: rgba(61, 47, 41, .35);
+
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.venue-browse-meta {
+  margin-top: 4px;
+
+  color: rgba(61, 47, 41, .48);
+
+  font-size: 10.5px;
+  font-weight: 550;
+
+  line-height: 1.25;
+}
+
+.venue-browse-note {
+  margin-top: 8px;
+
+  color: rgba(61, 47, 41, .65);
+
+  font-size: 11.5px;
+  line-height: 1.38;
+}
+
+.venue-browse-moments {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 5px;
+
+  margin-top: 10px;
+}
+
+.venue-moment-tag {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 21px;
+  padding: 0 8px;
+
+  border-radius: 999px;
+
+  background: rgba(61, 47, 41, .065);
+
+  color: rgba(61, 47, 41, .62);
+
+  font-size: 9.5px;
+  font-weight: 650;
+
+  text-transform: capitalize;
+}
+    
 
 /* =========================================================
    SELECTED VENUE
@@ -1696,10 +1825,17 @@ function renderList(data){
       : `${data.length} spot${data.length === 1 ? "" : "s"}`;
   }
 
+  /* -----------------------------
+     EMPTY STATE
+  ----------------------------- */
+
   if (!data.length) {
     results.innerHTML = `
       <div class="map-summary-card">
-        <div class="map-summary-eyebrow">No matches</div>
+
+        <div class="map-summary-eyebrow">
+          No matches
+        </div>
 
         <div class="map-summary-title">
           Try another moment
@@ -1708,54 +1844,146 @@ function renderList(data){
         <div class="map-summary-copy">
           Switch the filter above to explore more coffee spots.
         </div>
+
       </div>
     `;
 
     return;
   }
 
+
+  /* -----------------------------
+     SUMMARY COPY
+  ----------------------------- */
+
   let eyebrow = "Explore NYC";
   let title = `${data.length} coffee spots`;
-  let copy = "Explore the map or choose a moment to find the right spot.";
+  let copy = "Explore the map or browse the spots below.";
 
   if (currentMoment !== "all") {
 
-  const momentContent = {
-    quick: {
-      eyebrow: "Quick",
-      title: `${data.length} spots for a quick coffee`,
-      copy: "Easy stops for when you need something nearby."
-    },
+    const momentContent = {
 
-    work: {
-      eyebrow: "Work",
-      title: `${data.length} spots worth settling into`,
-      copy: "Coffee shops picked for laptops, longer stays, and getting something done."
-    },
+      quick: {
+        eyebrow: "Quick",
+        title: `${data.length} spots for a quick coffee`,
+        copy: "Easy stops for when you need something nearby."
+      },
 
-    relax: {
-      eyebrow: "Relax",
-      title: `${data.length} spots to slow down`,
-      copy: "Quieter coffee shops for when you're not trying to be anywhere else."
-    },
+      work: {
+        eyebrow: "Work",
+        title: `${data.length} spots worth settling into`,
+        copy: "Picked for laptops, longer stays, and getting something done."
+      },
 
-    social: {
-      eyebrow: "Social",
-      title: `${data.length} spots for catching up`,
-      copy: "Coffee shops with enough energy to stay awhile with someone."
+      relax: {
+        eyebrow: "Relax",
+        title: `${data.length} spots to slow down`,
+        copy: "Quieter coffee shops for when you're not trying to be anywhere else."
+      },
+
+      social: {
+        eyebrow: "Social",
+        title: `${data.length} spots for catching up`,
+        copy: "Coffee shops with enough energy to stay awhile with someone."
+      }
+
+    };
+
+    const content = momentContent[currentMoment];
+
+    if (content) {
+      eyebrow = content.eyebrow;
+      title = content.title;
+      copy = content.copy;
     }
-  };
-
-  const content = momentContent[currentMoment];
-
-  if (content) {
-    eyebrow = content.eyebrow;
-    title = content.title;
-    copy = content.copy;
   }
-}
+
+
+  /* -----------------------------
+     VENUE CARDS
+  ----------------------------- */
+
+  const venueCards = data.map(loc => {
+
+    const distance = _distanceLabelForVenue(loc);
+
+    const meta = [
+      loc.neighborhood,
+      distance
+    ]
+      .filter(Boolean)
+      .join(" • ");
+
+    const moments = Array.isArray(loc.moments)
+      ? loc.moments
+      : [];
+
+    const momentTags = moments.map(moment => `
+      <span class="venue-moment-tag">
+        ${moment}
+      </span>
+    `).join("");
+
+
+    return `
+      <button
+        class="venue-browse-card"
+        type="button"
+        data-browse-venue="${loc.id}"
+      >
+
+        <div class="venue-browse-top">
+
+          <div class="venue-browse-name">
+            ${loc.name || ""}
+          </div>
+
+          <div class="venue-browse-arrow">
+            →
+          </div>
+
+        </div>
+
+        ${meta
+          ? `
+            <div class="venue-browse-meta">
+              ${meta}
+            </div>
+          `
+          : ""
+        }
+
+        ${loc.moment_note
+          ? `
+            <div class="venue-browse-note">
+              ${loc.moment_note}
+            </div>
+          `
+          : ""
+        }
+
+        ${momentTags
+          ? `
+            <div class="venue-browse-moments">
+              ${momentTags}
+            </div>
+          `
+          : ""
+        }
+
+      </button>
+    `;
+
+  }).join("");
+
+
+  /* -----------------------------
+     RENDER
+  ----------------------------- */
 
   results.innerHTML = `
+
     <div class="map-summary-card">
 
       <div class="map-summary-eyebrow">
@@ -1770,17 +1998,19 @@ function renderList(data){
         ${copy}
       </div>
 
-      <button
-        class="make-plan-btn"
-        type="button"
-        data-action="make-plan"
-      >
-        <span>Make a Plan</span>
-        <span class="make-plan-arrow">→</span>
-      </button>
+    </div>
+
+
+    <div class="venue-browser">
+
+      <div class="venue-browser-list">
+        ${venueCards}
+      </div>
 
     </div>
+
   `;
+
 
   window.SipSober?.sendVenuesToNative?.(data);
 }
@@ -2172,6 +2402,21 @@ document.addEventListener("click", e => {
     return;
   }
 
+  const browseCard = e.target.closest(".venue-browse-card");
+
+  if (browseCard) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const venueId = browseCard.dataset.browseVenue;
+
+    if (!venueId) return;
+
+    window.SipSober?.focusVenue(venueId);
+
+    return;
+  }
+  
   const nameEl = e.target.closest(
     ".card-name[data-focus-id], .featured-title[data-focus-id], .explore-card-name[data-focus-id]"
   );
