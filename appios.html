@@ -388,11 +388,9 @@ body.map-ready #map {
 
   flex: 1 1 auto;
   min-height: 0;
-
   margin-top: -24px;
 
   z-index: 500;
-
   display: flex;
   flex-direction: column;
 
@@ -401,22 +399,21 @@ body.map-ready #map {
     0
     calc(10px + env(safe-area-inset-bottom));
 
-  /* Brew Break — warm coffee cream */
   background:
-    linear-gradient(
-      180deg,
-      #F6F0EB 0%,
-      #F9F5F1 48%,
-      #FCF9F6 100%
-    );
+  linear-gradient(
+    180deg,
+    #D8D3D0 0%,
+    #DFDBD8 48%,
+    #E6E2DF 100%
+  );
 
   border-radius: 28px 28px 0 0;
 
   border-top:
-    1px solid rgba(42, 33, 29, .08);
+    1px solid rgba(42, 33, 29, .10);
 
   box-shadow:
-    0 -12px 40px rgba(42, 33, 29, .12);
+    0 -12px 40px rgba(42, 33, 29, .14);
 
   overflow: hidden;
 }
@@ -435,7 +432,7 @@ body.map-ready #map {
 
   border-radius: 999px;
 
-  background: rgba(54, 42, 37, .20);
+  background: rgba(54, 42, 37, .28);
 
   flex: 0 0 auto;
 }
