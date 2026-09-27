@@ -40,7 +40,7 @@
   --line: rgba(255,255,255,.08);
   --shadow: rgba(0,0,0,.20);
 
-  --map-height: 54vh;
+  --map-height: 66vh;
 }
 
 * {
@@ -105,8 +105,8 @@ body {
 }
 
 @supports (height: 100dvh) {
-  #map {
-    height: 54dvh;
+  :root {
+    --map-height: 66dvh;
   }
 }
 
@@ -380,12 +380,6 @@ body.map-ready #map {
   transform: scale(.92);
 }
 
-@supports (height: 100dvh) {
-  #toolbar-actions {
-    top: calc(54dvh - 96px);
-  }
-}
-
 
 /* =========================================================
    BOTTOM DISCOVERY SHEET
@@ -396,7 +390,7 @@ body.map-ready #map {
 
   flex: 1 1 auto;
   min-height: 0;
-  margin-top: -24px;
+  margin-top: -14px;
 
   z-index: 500;
   display: flex;
@@ -415,40 +409,20 @@ body.map-ready #map {
     #E6E2DF 100%
   );
 
-  border-radius: 28px 28px 0 0;
+  border-radius: 22px 22px 0 0;
 
   border-top:
     1px solid rgba(42, 33, 29, .10);
 
   box-shadow:
-    0 -12px 40px rgba(42, 33, 29, .14);
+    0 -8px 28px rgba(42, 33, 29, .10);
 
   overflow: hidden;
 }
 
 
-/* little sheet handle */
-
-#bottom-panel::before {
-  content: "";
-
-  display: block;
-  width: 34px;
-  height: 4px;
-
-  margin: 9px auto 2px;
-
-  border-radius: 999px;
-
-  background: rgba(54, 42, 37, .28);
-
-  flex: 0 0 auto;
-}
-
 #panel-header {
-  flex: 0 0 auto;
-
-  padding: 5px 18px 7px;
+  display: none;
 }
 
 #panel-body {
@@ -540,7 +514,7 @@ body.map-ready #map {
 ========================================================= */
 
 .map-summary-card {
-  padding: 10px 20px 20px;
+  padding: 18px 20px 20px;
 }
 
 .map-summary-eyebrow,
@@ -640,7 +614,7 @@ body.map-ready #map {
 ========================================================= */
 
 .selected-venue-card {
-  padding: 10px 20px 20px;
+  padding: 18px 20px 20px;
 }
 
 .selected-venue-top {
@@ -1090,7 +1064,13 @@ body.ss-embed #filters {
 @media (max-width: 390px) {
 
   :root {
-    --map-height: 52vh;
+    --map-height: 64vh;
+  }
+
+  @supports (height: 100dvh) {
+    :root {
+      --map-height: 64dvh;
+    }
   }
 
   #map {
@@ -1739,14 +1719,41 @@ function renderList(data){
   let copy = "Explore the map or choose a moment to find the right spot.";
 
   if (currentMoment !== "all") {
-    const label =
-      currentMoment.charAt(0).toUpperCase() +
-      currentMoment.slice(1);
 
-    eyebrow = `${label} moment`;
-    title = `${data.length} ${currentMoment} spot${data.length === 1 ? "" : "s"}`;
-    copy = "Explore the pins or turn this coffee break into a plan.";
+  const momentContent = {
+    quick: {
+      eyebrow: "Quick",
+      title: `${data.length} spots for a quick coffee`,
+      copy: "Easy stops for when you need something nearby."
+    },
+
+    work: {
+      eyebrow: "Work",
+      title: `${data.length} spots worth settling into`,
+      copy: "Coffee shops picked for laptops, longer stays, and getting something done."
+    },
+
+    relax: {
+      eyebrow: "Relax",
+      title: `${data.length} spots to slow down`,
+      copy: "Quieter coffee shops for when you're not trying to be anywhere else."
+    },
+
+    social: {
+      eyebrow: "Social",
+      title: `${data.length} spots for catching up`,
+      copy: "Coffee shops with enough energy to stay awhile with someone."
+    }
+  };
+
+  const content = momentContent[currentMoment];
+
+  if (content) {
+    eyebrow = content.eyebrow;
+    title = content.title;
+    copy = content.copy;
   }
+}
 
   results.innerHTML = `
     <div class="map-summary-card">
