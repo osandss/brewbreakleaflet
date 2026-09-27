@@ -208,50 +208,56 @@ body.map-ready #map {
 
 /* =========================================================
    MOMENT FILTERS
-   Now FLOATING OVER the map
+   Brew Break segmented control
 ========================================================= */
 
 #filters {
   position: absolute;
-
-  top: 12px;
+  top: 14px;
   left: 0;
   right: 0;
 
   z-index: 3000;
-
   padding: 0 14px;
-
   pointer-events: none;
 }
 
 #filters-main {
-  display: flex;
-  align-items: center;
-
   width: 100%;
 
-  padding: 0;
-
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-
+  display: flex;
+  align-items: center;
   pointer-events: auto;
 }
 
+/* One floating glass container instead of
+   five separate floating pills */
 #moment-bar {
   display: flex;
   align-items: center;
-  gap: 7px;
 
-  width: 100%;
+  width: max-content;
+  max-width: 100%;
+
+  gap: 3px;
+  padding: 4px;
 
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 
-  padding: 2px 2px 10px;
+  border-radius: 999px;
+
+  background: rgba(255, 249, 243, .88);
+
+  border: 1px solid rgba(73, 52, 42, .08);
+
+  box-shadow:
+    0 8px 24px rgba(43, 31, 26, .10),
+    inset 0 1px 0 rgba(255,255,255,.68);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 #moment-bar::-webkit-scrollbar {
@@ -263,40 +269,43 @@ body.map-ready #map {
   -webkit-appearance: none;
 
   flex: 0 0 auto;
+  height: 34px;
+  padding: 0 14px;
 
-  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  padding: 0 15px;
-
+  border: 0;
   border-radius: 999px;
 
-  border: 1px solid rgba(73, 52, 42, .10);
+  background: transparent;
 
-  background: rgba(255, 249, 243, .90);
+  color: rgba(57, 41, 34, .58);
 
-  color: rgba(57, 41, 34, .76);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    system-ui,
+    sans-serif;
 
-  font-size: 12px;
-  font-weight: 650;
+  font-size: 11.5px;
+  font-weight: 600;
 
   letter-spacing: -.01em;
 
   white-space: nowrap;
 
-  box-shadow:
-    0 5px 16px rgba(56, 38, 29, .08),
-    inset 0 1px 0 rgba(255,255,255,.55);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
   cursor: pointer;
 
+  box-shadow: none;
+
   transition:
-    transform .18s ease,
-    background .18s ease,
-    color .18s ease,
-    box-shadow .18s ease;
+    background .22s ease,
+    color .22s ease,
+    transform .16s ease,
+    box-shadow .22s ease;
 }
 
 .moment-pill:active {
@@ -304,13 +313,12 @@ body.map-ready #map {
 }
 
 .moment-pill.active {
-  background: rgba(55, 39, 32, .94);
-  border-color: rgba(55, 39, 32, .94);
+  background: #2A211D;
 
-  color: #fffaf5;
+  color: #FFF9F3;
 
   box-shadow:
-    0 7px 20px rgba(45, 30, 24, .18),
+    0 3px 9px rgba(42, 33, 29, .18),
     inset 0 1px 0 rgba(255,255,255,.08);
 }
 
@@ -580,7 +588,7 @@ body.map-ready #map {
   background:
     radial-gradient(
       circle,
-      rgba(66, 72, 105, .10)
+      rgba(66, 72, 105, .10),
       rgba(136, 101, 79, 0) 70%
     );
 
@@ -1115,11 +1123,14 @@ body.ss-embed #filters {
   }
 
   .moment-pill {
-    min-height: 32px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
 
-    padding: 0 13px;
-
-    font-size: 11.5px;
+  #moment-bar {
+    gap: 2px;
+    padding: 4px;
   }
 
   .featured-card {
@@ -1158,12 +1169,12 @@ body.ss-embed #filters {
 <!-- TOP FILTER BAR -->
 <div id="filters" class="topbar filterbar">
   <div id="filters-main">
-    <div id="moment-bar" aria-label="Moments">
+    <div id="moment-bar" aria-label="Find your moment">
       <button class="moment-pill active" type="button" data-moment="all">All</button>
-      <button class="moment-pill" type="button" data-moment="work">Work</button>
       <button class="moment-pill" type="button" data-moment="quick">Quick</button>
-      <button class="moment-pill" type="button" data-moment="social">Social</button>
+      <button class="moment-pill" type="button" data-moment="work">Work</button>
       <button class="moment-pill" type="button" data-moment="relax">Relax</button>
+      <button class="moment-pill" type="button" data-moment="social">Social</button>
     </div>
   </div>
 </div>
@@ -1975,13 +1986,15 @@ function fitInitialView(){
 
 function resetMapToDefault(){
   closeAllMenus();
-  
+
   currentMoment = "all";
   _suppressAutoFit = true;
 
+  syncMomentPillsUI();
+
   window.SipSober.clearUserLocation();
+
   applyFiltersUnified();
-  updateActiveMoment();
 
   if (map) {
     map.closePopup();
@@ -2134,12 +2147,7 @@ resetBtn?.addEventListener("click", e => {
   e.preventDefault();
   e.stopPropagation();
 
-  currentMoment = "all";
-  syncMomentPillsUI();
-  updateActiveMoment();
-
   resetMapToDefault();
-  
 });
   
 (() => {
