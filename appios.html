@@ -1383,6 +1383,7 @@ document.body.classList.add("map-loading");
 let map, markersLayer, markersById={};
 let _mapReady=false, _pendingUserLocation=null;
 let currentMoment = "all";
+let _didReceiveInitialMoment = false;
 let _userLocationForDistance=null, _userDot=null, _userHalo=null;
 let _activeMarker=null, _lastFocusedVenueId=null;
 let _suppressAutoFit = false;
@@ -1475,7 +1476,10 @@ function _initMap(){
     _pendingUserLocation = null;
   }
 
-  applyFiltersUnified();
+  if (!window.SipSober.isEmbed || _didReceiveInitialMoment) {
+    applyFiltersUnified();
+  }
+  
   window.SipSober?.sendVenuesToNative?.();
   kickSize();
 }
@@ -2060,6 +2064,8 @@ function setMoment(moment){
     ? nextMoment
     : "all";
 
+  _didReceiveInitialMoment = true;
+
   syncMomentPillsUI();
   updateActiveMoment();
   applyFiltersUnified();
@@ -2217,8 +2223,17 @@ bindMomentPills();
 syncMomentPillsUI();
 updateActiveMoment();
 
-// Render list immediately (map init is async but list doesn't need it)
-renderList(locations.slice().sort((a, b) => (a.name || "").localeCompare(b.name || "")));
+// In the standalone web version, show all spots immediately.
+// In the iOS app, wait for Swift to send the selected moment.
+if (!window.SipSober.isEmbed) {
+  renderList(
+    locations
+      .slice()
+      .sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      )
+  );
+}
   
 </script>
 
