@@ -2452,6 +2452,29 @@ document.addEventListener("click", e => {
 
     return;
   }
+
+  const planBtn = e.target.closest(".selected-venue-plan");
+
+  if (planBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const venueId = planBtn.dataset.planVenue;
+
+    const venue = locations.find(
+      loc => String(loc.id) === String(venueId)
+    );
+
+    if (!venue) return;
+
+    window.webkit?.messageHandlers?.planHere?.postMessage({
+      id: String(venue.id || ""),
+      name: venue.name || "",
+      neighborhood: venue.neighborhood || ""
+    });
+
+    return;
+  }
   
   const nameEl = e.target.closest(
     ".card-name[data-focus-id], .featured-title[data-focus-id], .explore-card-name[data-focus-id]"
