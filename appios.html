@@ -188,20 +188,15 @@ body.map-ready #map {
   pointer-events: none;
 
   background:
-    radial-gradient(
-      circle at 50% 38%,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,0) 42%,
-      rgba(31,34,55,.04) 72%,
-      rgba(27,30,49,.12) 100%
-    ),
     linear-gradient(
       180deg,
-      rgba(27,30,49,.14) 0%,
-      rgba(31,34,55,.05) 25%,
-      rgba(255,255,255,0) 52%,
-      rgba(31,34,55,.04) 75%,
-      rgba(27,30,49,.12) 100%
+      rgba(47, 31, 22, .96) 0%,
+      rgba(60, 41, 30, .88) 8%,
+      rgba(79, 57, 43, .72) 18%,
+      rgba(101, 78, 61, .48) 30%,
+      rgba(126, 105, 88, .25) 42%,
+      rgba(126, 105, 88, .08) 53%,
+      rgba(126, 105, 88, 0) 63%
     );
 }
 
@@ -236,28 +231,24 @@ body.map-ready #map {
   display: flex;
   align-items: center;
 
-  width: max-content;
+  width: 100%;
   max-width: 100%;
 
-  gap: 3px;
-  padding: 4px;
+  gap: 8px;
+  padding: 0;
 
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 
-  border-radius: 999px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 
-  background: rgba(255, 249, 243, .88);
+  box-shadow: none;
 
-  border: 1px solid rgba(73, 52, 42, .08);
-
-  box-shadow:
-    0 8px 24px rgba(43, 31, 26, .10),
-    inset 0 1px 0 rgba(255,255,255,.68);
-
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 #moment-bar::-webkit-scrollbar {
@@ -268,20 +259,21 @@ body.map-ready #map {
   appearance: none;
   -webkit-appearance: none;
 
-  flex: 0 0 auto;
-  height: 34px;
-  padding: 0 14px;
+  flex: 1 0 auto;
+
+  height: 40px;
+  padding: 0 16px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  border: 0;
+  border: 1px solid rgba(255, 244, 233, .42);
   border-radius: 999px;
 
-  background: transparent;
+  background: rgba(62, 45, 35, .30);
 
-  color: rgba(57, 41, 34, .58);
+  color: rgba(255, 250, 245, .96);
 
   font-family:
     -apple-system,
@@ -290,8 +282,8 @@ body.map-ready #map {
     system-ui,
     sans-serif;
 
-  font-size: 11.5px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 650;
 
   letter-spacing: -.01em;
 
@@ -299,10 +291,16 @@ body.map-ready #map {
 
   cursor: pointer;
 
-  box-shadow: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 2px 8px rgba(32,20,14,.08);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   transition:
     background .22s ease,
+    border-color .22s ease,
     color .22s ease,
     transform .16s ease,
     box-shadow .22s ease;
@@ -313,13 +311,20 @@ body.map-ready #map {
 }
 
 .moment-pill.active {
-  background: #2A211D;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(135, 83, 54, .96) 0%,
+      rgba(111, 65, 43, .96) 100%
+    );
+
+  border-color: rgba(224, 161, 119, .88);
 
   color: #FFF9F3;
 
   box-shadow:
-    0 3px 9px rgba(42, 33, 29, .18),
-    inset 0 1px 0 rgba(255,255,255,.08);
+    0 4px 12px rgba(40, 23, 15, .20),
+    inset 0 1px 0 rgba(255,255,255,.16);
 }
 
 
@@ -1205,18 +1210,6 @@ body.ss-embed #filters {
   #map {
     min-height: 320px;
   }
-
-  .moment-pill {
-    height: 32px;
-    padding: 0 12px;
-    font-size: 11px;
-  }
-
-  #moment-bar {
-    gap: 2px;
-    padding: 4px;
-  }
-
 
   #toolbar-actions {
     right: 12px;
