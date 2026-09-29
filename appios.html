@@ -1639,39 +1639,42 @@ if (document.readyState === "loading") {
 }
 
 /* ─── ICONS ────────────────────────────────────────────────────── */
-function makePinIconSVG(hex="#473E31", size=[18,26], opts = {}) {
+function makePinIconSVG(hex="#3A2B24", size=[24,24], opts = {}) {
   const [w, h] = size;
 
   return `
   <svg xmlns="http://www.w3.org/2000/svg"
        width="${w}"
        height="${h}"
-       viewBox="0 0 18 26">
+       viewBox="0 0 24 24">
 
-      <defs>
-        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-          <feDropShadow
-              dx="0"
-              dy="1"
-              stdDeviation="1"
-              flood-color="rgba(0,0,0,.18)"/>
-        </filter>
-      </defs>
+    <defs>
+      <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow
+          dx="0"
+          dy="1.5"
+          stdDeviation="1.5"
+          flood-color="#2A211D"
+          flood-opacity=".22"/>
+      </filter>
+    </defs>
 
-      <path
-        filter="url(#shadow)"
-        d="M9 1
-           C5 1 2 4.2 2 8
-           C2 13.5 9 24 9 24
-           C9 24 16 13.5 16 8
-           C16 4.2 13 1 9 1Z"
-        fill="${hex}"/>
+    <circle
+      cx="12"
+      cy="12"
+      r="9.5"
+      fill="#FFF9F3"
+      stroke="${hex}"
+      stroke-width="1.5"
+      filter="url(#shadow)"
+    />
 
-      <circle
-        cx="9"
-        cy="8"
-        r="2.2"
-        fill="#F7F5F2"/>
+    <circle
+      cx="12"
+      cy="12"
+      r="3"
+      fill="${hex}"
+    />
 
   </svg>
   `;
@@ -1692,11 +1695,11 @@ function _buildIcons() {
   const isMobile = mobileQuery.matches;
 
   if (isMobile) {
-    defaultIcon = makeIcon([12,18], "#473E31");
-    activeIcon  = makeIcon([14,21], "#2F281F");
+    defaultIcon = makeIcon([24,24], "#49362D");
+    activeIcon  = makeIcon([32,32], "#2F241F");
   } else {
-    defaultIcon = makeIcon([18,26], "#473E31");
-    activeIcon  = makeIcon([20,30], "#2F281F");
+    defaultIcon = makeIcon([24,24], "#49362D");
+    activeIcon  = makeIcon([32,32], "#2F241F");
   }
 
   currentIcon = defaultIcon;
