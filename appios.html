@@ -1121,7 +1121,6 @@ body.map-ready #map {
 }
 
 
-
 /* =========================================================
    FAVORITES
 ========================================================= */
@@ -1206,175 +1205,43 @@ body.map-ready #map {
 
 
 /* =========================================================
-   POPUP — BREW BREAK CARD
+   SELECTED PIN — VENUE NAME
 ========================================================= */
 
-.leaflet-popup {
-  margin-bottom: 10px;
-}
+.leaflet-tooltip.brewbreak-pin-label {
+  padding: 6px 9px;
 
-.leaflet-popup-content-wrapper {
-  padding: 0 !important;
+  border: 0;
+  border-radius: 8px;
 
-  border-radius: 20px !important;
+  background: rgba(42, 33, 29, .90);
 
-  background:
-    rgba(255, 250, 245, .97) !important;
+  color: #FFF9F3;
 
-  border:
-    1px solid rgba(73, 52, 42, .08);
-
-  box-shadow:
-    0 18px 45px rgba(46, 30, 23, .18) !important;
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.leaflet-popup-content {
-  width: auto !important;
-  max-width: none !important;
-
-  margin: 0 !important;
-}
-
-.leaflet-popup-tip {
-  background: #fffaf5 !important;
-
-  box-shadow: none !important;
-}
-
-.ss-popup--simple {
-  min-width: 220px;
-  max-width: 270px;
-
-  padding: 14px;
-
-  color: #33251f;
-}
-
-.ss-popup-top {
-  display: flex;
-
-  gap: 11px;
-
-  align-items: flex-start;
-}
-
-.ss-popup-text {
-  flex: 1;
-
-  min-width: 0;
-}
-
-.ss-popup-img-wrap {
-  display: block;
-
-  flex: 0 0 78px;
-
-  margin: 0;
-}
-
-.ss-popup-img {
-  display: block;
-
-  width: 78px;
-  height: 70px;
-
-  object-fit: cover;
-
-  border-radius: 13px;
-}
-
-.ss-popup--simple .ss-popup-title {
-  margin: 0 0 4px;
-
-  color: #30221c;
-
-  font-size: 13.5px;
-  font-weight: 700;
-
-  line-height: 1.18;
-
-  letter-spacing: -.02em;
-}
-
-.ss-popup--simple .ss-popup-tags {
-  margin: 0 0 5px;
-
-  color: #8c7c72;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    system-ui,
+    sans-serif;
 
   font-size: 10.5px;
-
-  line-height: 1.2;
-}
-
-.ss-popup--simple .ss-popup-meta {
-  margin: 0 0 8px;
-
-  color: #6f6058;
-
-  font-size: 10.5px;
-
-  line-height: 1.28;
-}
-
-.ss-popup--simple .ss-popup-actions {
-  display: flex;
-
-  gap: 6px;
-
-  align-items: center;
-
-  margin-top: 6px;
-}
-
-.ss-popup--simple .ss-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 27px;
-
-  padding: 0 10px;
-
-  border-radius: 999px;
-
-  background: #49352b;
-
-  border: 1px solid #49352b;
-
-  color: #fffaf5;
-
-  font-size: 10px;
   font-weight: 650;
+  line-height: 1;
 
-  text-decoration: none;
+  letter-spacing: -.01em;
 
   white-space: nowrap;
+
+  box-shadow:
+    0 4px 12px rgba(42, 33, 29, .16);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.ss-popup--simple .ss-pill.secondary {
-  background: #eee2d7;
-
-  border-color:
-    rgba(72, 51, 41, .07);
-
-  color: #4d392f;
-}
-
-.leaflet-container a.leaflet-popup-close-button {
-  top: 5px !important;
-  right: 5px !important;
-
-  width: 26px !important;
-  height: 26px !important;
-
-  color: rgba(55, 39, 32, .42) !important;
-
-  font-size: 18px !important;
-
-  line-height: 25px !important;
+.leaflet-tooltip-top.brewbreak-pin-label::before {
+  border-top-color: rgba(42, 33, 29, .90);
 }
 
 
@@ -1807,12 +1674,6 @@ function _initMap(){
     setTimeout(kickSize, 150);
   });
 
-  map.on("popupclose", () => {
-    clearActiveMarker();
-    _lastFocusedVenueId = null;
-    applyFiltersUnified();
-  });
-
   _buildIcons();
   applyIconForViewport();
   mobileQuery.addEventListener("change", applyIconForViewport);
@@ -2075,13 +1936,19 @@ function renderMarkers(data){
   data.forEach(loc=>{
     const m=L.marker([loc.lat,loc.lng]).addTo(markersLayer);
     m.on("click", () => {
-      setActiveMarker(m);
-      renderSelectedVenue(loc);
-    });
+    setActiveMarker(m);
+    renderSelectedVenue(loc);
+  
+    m.bindTooltip(loc.name || "", {
+      permanent: false,
+      direction: "top",
+      offset: [0, -16],
+      opacity: 1,
+      className: "brewbreak-pin-label"
+    }).openTooltip();
+  });
     if(loc.id) markersById[String(loc.id)]=m;
-    const imgHtml=loc.imageUrl?`<div class="ss-popup-img-wrap"><img class="ss-popup-img" src="${loc.imageUrl}" alt="${loc.name||""}" loading="lazy" onerror="this.closest('.ss-popup-img-wrap')?.remove()"></div>`:"";
-    const web=normalizeUrl(loc.website);
-    m.bindPopup(`<div class="ss-popup ss-popup--simple"><div class="ss-popup-top">${imgHtml}<div class="ss-popup-text"><div class="ss-popup-title">${loc.name||""}</div>${loc.neighborhood?`<div class="ss-popup-tags">${loc.neighborhood}</div>`:""}<div class="ss-popup-meta">${loc.address||""}</div><div class="ss-popup-actions">${web?`<a class="ss-pill" href="${web}" target="_blank" rel="noopener">Website</a>`:""}<a class="ss-pill secondary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((loc.name||"")+" "+(loc.address||""))}" target="_blank" rel="noopener">Directions</a></div></div></div></div>`,{minWidth:220,maxWidth:280,closeButton:true,autoPan:true,keepInView:true,autoPanPaddingTopLeft:[18,160],autoPanPaddingBottomRight:[18,260],offset:[0,-18]});
+    
     bounds.extend([loc.lat,loc.lng]);
   });
   return{count:data.length,bounds:data.length?bounds:null};
@@ -2631,11 +2498,13 @@ function resetMapToDefault(){
   applyFiltersUnified();
 
   if (map) {
-    map.closePopup();
+    map.closeTooltip();
+    clearActiveMarker();
+    _lastFocusedVenueId = null;
+  
     map.invalidateSize({ animate: false, pan: false });
     fitInitialView();
   }
-
   _suppressAutoFit = false;
 }
 
@@ -2703,29 +2572,43 @@ window.SipSober.focusVenue = function(payload){
     map.setView([ll.lat, ll.lng], 16, { animate: true });
 
     setTimeout(() => {
-      setActiveMarker(marker);
-    
-      const loc = locations.find(
-        x => String(x.id) === String(id)
-      );
-    
-      if (loc) {
-        renderSelectedVenue(loc);
-      }
-    
-      marker.openPopup();
-    
-      const c = document.querySelector(".leaflet-popup-close-button");
-      if (c) c.addEventListener("click", () => { _lastFocusedVenueId = null; }, { once: true });
-    }, 200);
+  setActiveMarker(marker);
 
-    const panel = document.getElementById("bottom-panel");
-    if (panel) panel.classList.add("expanded");
-  })();
+  const loc = locations.find(
+    x => String(x.id) === String(id)
+  );
+
+  if (loc) {
+    renderSelectedVenue(loc);
+
+    marker.bindTooltip(loc.name || "", {
+      permanent: false,
+      direction: "top",
+      offset: [0, -16],
+      opacity: 1,
+      className: "brewbreak-pin-label"
+    }).openTooltip();
+  }
+
+}, 200);
+
+const panel = document.getElementById("bottom-panel");
+
+if (panel) {
+  panel.classList.add("expanded");
+}
+
+})();
 };
 
 window.SipSober.focusVenueById=function(id){window.SipSober.focusVenue(id);};
-window.SipSober.closePopup=function(){try{map?.closePopup();}catch(e){}};
+window.SipSober.closePopup = function() {
+  try {
+    map?.closeTooltip();
+    clearActiveMarker();
+    _lastFocusedVenueId = null;
+  } catch(e) {}
+};
 
 /* ─── EVENT WIRING ──────────────────────────────────────────────── */
 document.addEventListener("keydown", e => {
