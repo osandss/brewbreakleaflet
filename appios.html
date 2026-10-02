@@ -1332,6 +1332,143 @@ body.ss-embed #filters {
     top: calc(var(--map-height) - 92px);
   }
 }
+
+/* =========================================================
+   VENUE DETAIL MODE
+   Expands the bottom sheet when a venue is selected
+========================================================= */
+
+body.venue-detail-open {
+  --map-height: 34vh;
+}
+
+@supports (height: 100dvh) {
+  body.venue-detail-open {
+    --map-height: 34dvh;
+  }
+}
+
+body.venue-detail-open #map {
+  min-height: 0;
+  max-height: none;
+
+  transition:
+    height .38s cubic-bezier(.22, .8, .25, 1);
+}
+
+body.venue-detail-open #bottom-panel {
+  margin-top: -18px;
+
+  transition:
+    margin-top .38s cubic-bezier(.22, .8, .25, 1);
+}
+
+body.venue-detail-open #panel-body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* Detail sheet should stay Brew Break dark */
+body.venue-detail-open .selected-venue-card {
+  min-height: 100%;
+}
+
+
+/* Venue detail typography on dark background */
+body.venue-detail-open .selected-venue-name {
+  color: #FFF9F3;
+}
+
+body.venue-detail-open .selected-venue-meta {
+  color: rgba(234, 221, 212, .48);
+}
+
+body.venue-detail-open .selected-venue-note {
+  color: rgba(242, 232, 224, .68);
+}
+
+body.venue-detail-open .selected-venue-moment {
+  background: rgba(200, 138, 98, .10);
+  border-color: rgba(200, 138, 98, .10);
+  color: rgba(225, 166, 127, .88);
+}
+
+body.venue-detail-open .selected-venue-secondary {
+  background: rgba(255, 249, 243, .06);
+  border-color: rgba(255, 249, 243, .08);
+  color: #FFF9F3;
+}
+
+body.venue-detail-open .selected-venue-plan {
+  background: rgba(255, 249, 243, .94);
+  color: #352923;
+}
+
+
+/* No-image favorite */
+body.venue-detail-open
+.selected-venue-card.no-image
+.selected-fav {
+  background: rgba(255, 249, 243, .06);
+  border-color: rgba(255, 249, 243, .08);
+  color: rgba(255, 249, 243, .50);
+}
+
+body.venue-detail-open
+.selected-venue-card.no-image
+.selected-fav.is-fav {
+  color: #E8A47C;
+}
+
+.selected-venue-back {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255,255,255,.20);
+
+  background: rgba(42,33,29,.56);
+
+  color: #FFF9F3;
+
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 400;
+
+  line-height: 1;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  cursor: pointer;
+}
+
+.selected-venue-image-wrap .selected-venue-back {
+  position: absolute;
+
+  top: 14px;
+  left: 16px;
+
+  z-index: 3;
+}
+
+.selected-venue-card.no-image .selected-venue-back {
+  margin: 17px 20px 0;
+
+  background: rgba(255,249,243,.06);
+  border-color: rgba(255,249,243,.08);
+}
+
+    
 </style>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-W6LRN7EDH7"></script>
@@ -2238,6 +2375,8 @@ function renderList(data){
 
   if (!results) return;
 
+  document.body.classList.remove("venue-detail-open");
+
   results.innerHTML = "";
 
   if (rc) {
@@ -2441,6 +2580,14 @@ function renderSelectedVenue(loc){
 
   if (!results || !loc) return;
 
+  document.body.classList.add("venue-detail-open");
+
+  const panelBody = document.getElementById("panel-body");
+
+  if (panelBody) {
+    panelBody.scrollTop = 0;
+  }
+
   const web = normalizeUrl(loc.website);
   const distance = _distanceLabelForVenue(loc);
 
@@ -2488,6 +2635,14 @@ function renderSelectedVenue(loc){
             >
 
             <button
+              class="selected-venue-back"
+              type="button"
+              aria-label="Back to coffee spots"
+            >
+              ‹
+            </button>
+
+            <button
               class="fav-btn selected-fav"
               data-id="${loc.id}"
               aria-label="Favorite"
@@ -2497,7 +2652,15 @@ function renderSelectedVenue(loc){
 
           </div>
         `
-        : ""
+        : `
+          <button
+            class="selected-venue-back"
+            type="button"
+            aria-label="Back to coffee spots"
+          >
+            ‹
+          </button>
+        `
       }
 
       <div class="selected-venue-content">
@@ -2896,6 +3059,39 @@ document.addEventListener("keydown", e => {
 document.addEventListener("click", e => {
   if (e.target.closest("a")) {
     closeAllMenus();
+    return;
+  }
+
+  /* -----------------------------
+     BACK FROM VENUE DETAIL
+  ----------------------------- */
+
+  const backBtn = e.target.closest(".selected-venue-back");
+
+  if (backBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    document.body.classList.remove("venue-detail-open");
+
+    try {
+      map?.closeTooltip();
+    } catch(e) {}
+
+    clearActiveMarker();
+    _lastFocusedVenueId = null;
+
+    applyFiltersUnified();
+
+    requestAnimationFrame(() => {
+      if (map) {
+        map.invalidateSize({
+          animate: false,
+          pan: false
+        });
+      }
+    });
+
     return;
   }
 
