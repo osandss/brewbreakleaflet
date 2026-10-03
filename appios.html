@@ -981,6 +981,71 @@ body.map-ready #map {
   text-transform: uppercase;
 }
 
+/* -------------------------
+   VENUE DETAILS
+------------------------- */
+
+.selected-venue-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  margin-top: 20px;
+  padding-top: 18px;
+
+  border-top: 1px solid rgba(255, 249, 243, .07);
+}
+
+.selected-detail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selected-detail-label {
+  color: rgba(232, 213, 197, .42);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.selected-detail-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.selected-detail-chip {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 27px;
+  padding: 0 10px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 249, 243, .045);
+  border: 1px solid rgba(255, 249, 243, .065);
+
+  color: rgba(242, 232, 224, .72);
+
+  font-size: 10.5px;
+  font-weight: 550;
+
+  line-height: 1;
+}
+
+.selected-detail-group.best-for .selected-detail-chip {
+  background: rgba(200, 138, 98, .10);
+  border-color: rgba(200, 138, 98, .10);
+
+  color: rgba(225, 166, 127, .90);
+}
+  
+
 
 /* -------------------------
    QUICK ACTIONS
@@ -1520,137 +1585,197 @@ body.venue-detail-open
   
 /* ─── DATA ─────────────────────────────────────────────────────── */
 const locations = [
-  {
-    id: "sote-coffee-roasters-uws",
-    name: "Sote Coffee Roasters",
-    address: "329 Amsterdam Ave, New York, NY",
-    lat: 40.7809,
-    lng: -73.9797,
-    website: "https://sotecoffeeroasters.com",
-    neighborhood: "Upper West Side",
-    moments: ["work"],
-    moment_note: "Quiet, focused space for getting work done."
-  },
-  {
-    id: "green-lane-coffee-uws",
-    name: "Green Lane Coffee",
-    address: "204 W 96th St, New York, NY",
-    lat: 40.7942,
-    lng: -73.9718,
-    website: "https://www.greenlane.coffee",
-    neighborhood: "Upper West Side",
-    moments: ["quick", "relax"],
-    moment_note: "Friendly neighborhood stop for a specialty drink or relaxed coffee break."
-  },
-  {
-    id: "moka-and-co-upper-west-side",
-    name: "Moka & Co",
-    address: "2481 Broadway, New York, NY",
-    lat: 40.7929,
-    lng: -73.9736,
-    website: "https://mokanco.com",
-    neighborhood: "Upper West Side",
-    moments: ["social", "relax"],
-    moment_note: "Yemeni specialty café for distinctive coffee and an easy catch-up."
-  },
-  {
-    id: "birch-coffee-upper-west-side",
-    name: "Birch Coffee",
-    address: "750 Columbus Ave, New York, NY",
-    lat: 40.7927,
-    lng: -73.9672,
-    website: "https://www.birchcoffee.com",
-    neighborhood: "Upper West Side",
-    moments: ["work", "relax"],
-    moment_note: "Comfortable neighborhood coffee shop for reading, working, or taking a break."
-  },
-  {
-    id: "effys-cafe-columbus",
-    name: "Effy's Cafe & Patisserie",
-    address: "552 Columbus Ave, New York, NY",
-    lat: 40.7872,
-    lng: -73.9709,
-    website: "https://effyscafe.com",
-    neighborhood: "Upper West Side",
-    moments: ["social", "quick"],
-    moment_note: "Daytime café and patisserie for coffee, pastries, or an easy casual meet-up."
-  },
-  {
-    id: "picky-barista-72nd",
-    name: "Picky Barista",
-    address: "245 W 72nd St, New York, NY",
-    lat: 40.7790,
-    lng: -73.9831,
-    website: "https://pickybarista.com",
-    neighborhood: "Upper West Side",
-    moments: ["work", "quick"],
-    moment_note: "Convenient neighborhood café for working or grabbing coffee between plans."
-  },
-  {
-    id: "fellini-coffee-upper-west-side",
-    name: "Fellini Coffee",
-    address: "523 Amsterdam Ave, New York, NY",
-    lat: 40.7871,
-    lng: -73.9752,
-    website: "https://www.fellinicoffee.com",
-    neighborhood: "Upper West Side",
-    moments: ["social", "relax"],
-    moment_note: "Stylish Italian-inspired coffee bar for meeting a friend or lingering over espresso."
-  },
-  {
-    id: "chaotic-good-upper-west-side",
-    name: "Chaotic Good",
-    address: "200 W 84th St, New York, NY",
-    lat: 40.78640,
-    lng: -73.97638,
-    website: "https://www.chaoticgoodcafe.com",
-    neighborhood: "Upper West Side",
-    moments: ["social", "relax"],
-    moment_note: "Board game café and neighborhood third space built for hanging out and staying awhile."
-  },
-  {
-    id: "crossbar-upper-west-side",
-    name: "Crossbar",
-    address: "250 W 86th St, New York, NY",
-    lat: 40.7883,
-    lng: -73.9779,
-    website: "https://www.crossbar.nyc",
-    neighborhood: "Upper West Side",
-    moments: ["social"],
-    moment_note: "Soccer-focused café and community space made for meeting friends over coffee."
-  },
-  {
-    id: "maman-upper-west-side",
-    name: "Maman",
-    address: "429 Amsterdam Ave, New York, NY",
-    lat: 40.7842,
-    lng: -73.9776,
-    website: "https://mamannyc.com",
-    neighborhood: "Upper West Side",
-    moments: ["social", "relax"],
-    moment_note: "Charming café for a relaxed morning or coffee with a friend."
-  },
-  {
-    id: "bluestone-lane-upper-west-side",
-    name: "Bluestone Lane",
-    address: "417 Amsterdam Ave, New York, NY",
-    lat: 40.7839,
-    lng: -73.9778,
-    website: "https://bluestonelane.com",
-    neighborhood: "Upper West Side",
-    moments: ["social", "relax"],
-    moment_note: "Australian-style café for an easy coffee, brunch, or casual catch-up."
-  },
-  {
-    id: "daily-provisions-upper-west-side",
-    name: "Daily Provisions",
-    address: "375 Amsterdam Ave, New York, NY",
-    lat: 40.7822,
-    lng: -73.9788,
-    website: "https://www.dailyprovisions.co",
-    neighborhood: "Upper West Side",
-    moments: ["quick", "social"],
-    moment_note: "All-day neighborhood café for a morning coffee, pastry, or casual meet-up."
+ {
+  id: "sote-coffee-roasters-uws",
+  name: "Sote Coffee Roasters",
+  address: "329 Amsterdam Ave, New York, NY",
+  lat: 40.7809,
+  lng: -73.9797,
+  website: "https://sotecoffeeroasters.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["work"],
+  moment_note: "Quiet, focused space for getting work done.",
+
+  vibe: ["Cozy", "Neighborhood", "Coffee-focused"],
+  features: ["Roasted in-house", "Seating", "Weekend laptop restrictions"],
+  best_for: ["Weekday work", "Reading", "Coffee lovers"]
+},
+{
+  id: "green-lane-coffee-uws",
+  name: "Green Lane Coffee",
+  address: "204 W 96th St, New York, NY",
+  lat: 40.7942,
+  lng: -73.9718,
+  website: "https://www.greenlane.coffee",
+  neighborhood: "Upper West Side",
+
+  moments: ["quick", "relax"],
+  moment_note: "Friendly neighborhood stop for a specialty drink or relaxed coffee break.",
+
+  vibe: ["Neighborhood", "Creative", "Welcoming"],
+  features: ["Specialty drinks", "Seasonal drinks", "Single-origin coffee"],
+  best_for: ["Coffee runs", "Trying something new", "Casual breaks"]
+},
+{
+  id: "moka-and-co-upper-west-side",
+  name: "Moka & Co",
+  address: "2481 Broadway, New York, NY",
+  lat: 40.7929,
+  lng: -73.9736,
+  website: "https://mokanco.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["work", "social", "relax"],
+  moment_note: "Spacious Yemeni specialty café for working, meeting up, or slowing down over coffee.",
+
+  vibe: ["Calm", "Spacious", "Yemeni"],
+  features: ["Wi-Fi", "Outlets", "Plenty of seating", "Specialty Yemeni coffee"],
+  best_for: ["Working", "Studying", "Longer coffee breaks"]
+},
+{
+  id: "birch-coffee-upper-west-side",
+  name: "Birch Coffee",
+  address: "750 Columbus Ave, New York, NY",
+  lat: 40.7927,
+  lng: -73.9672,
+  website: "https://www.birchcoffee.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["work", "relax"],
+  moment_note: "Comfortable neighborhood coffee shop for reading, working, or taking a break.",
+
+  vibe: ["Casual", "Neighborhood", "Relaxed"],
+  features: ["Indoor seating", "Outdoor seating", "Specialty coffee"],
+  best_for: ["Reading", "Coffee breaks", "Sitting awhile"]
+},
+{
+  id: "effys-cafe-columbus",
+  name: "Effy's Cafe & Patisserie",
+  address: "552 Columbus Ave, New York, NY",
+  lat: 40.7872,
+  lng: -73.9709,
+  website: "https://effyscafe.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["social", "quick"],
+  moment_note: "Daytime café and patisserie for coffee, pastries, or an easy casual meet-up.",
+
+  vibe: ["Casual", "Neighborhood", "Daytime"],
+  features: ["Patisserie", "Dine-in", "Kosher certified", "Meatless menu"],
+  best_for: ["Coffee and pastries", "Quick stops", "Casual meet-ups"]
+},
+{
+  id: "picky-barista-72nd",
+  name: "Picky Barista",
+  address: "245 W 72nd St, New York, NY",
+  lat: 40.7790,
+  lng: -73.9831,
+  website: "https://pickybarista.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["work", "quick", "relax"],
+  moment_note: "Cozy neighborhood café for working during the week or settling in with coffee.",
+
+  vibe: ["Cozy", "Colorful", "European-inspired"],
+  features: ["Varied seating", "Homemade pastries", "Weekend laptop restrictions"],
+  best_for: ["Weekday work", "Coffee breaks", "Reading"]
+},
+{
+  id: "fellini-coffee-upper-west-side",
+  name: "Fellini Coffee",
+  address: "523 Amsterdam Ave, New York, NY",
+  lat: 40.7871,
+  lng: -73.9752,
+  website: "https://www.fellinicoffee.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["social", "relax"],
+  moment_note: "Stylish Italian-inspired coffee bar for meeting a friend or lingering over espresso.",
+
+  vibe: ["Italian-inspired", "Stylish", "Intimate"],
+  features: ["Coffee and wine", "Espresso", "Food and pastries"],
+  best_for: ["Coffee dates", "Catching up", "Leisurely coffee"]
+},
+{
+  id: "chaotic-good-upper-west-side",
+  name: "Chaotic Good",
+  address: "200 W 84th St, New York, NY",
+  lat: 40.78640,
+  lng: -73.97638,
+  website: "https://www.chaoticgoodcafe.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["social", "relax"],
+  moment_note: "Board game café and neighborhood third space built for hanging out and staying awhile.",
+
+  vibe: ["Playful", "Social", "Community"],
+  features: ["Board games", "Events", "Group seating", "Late hours"],
+  best_for: ["Friends", "Games", "Longer hangs"]
+},
+{
+  id: "crossbar-upper-west-side",
+  name: "Crossbar",
+  address: "250 W 86th St, New York, NY",
+  lat: 40.7883,
+  lng: -73.9779,
+  website: "https://www.crossbar.nyc",
+  neighborhood: "Upper West Side",
+
+  moments: ["social"],
+  moment_note: "Soccer-focused café and community space made for meeting friends over coffee.",
+
+  vibe: ["Social", "Sporty", "Community"],
+  features: ["Wi-Fi", "Coffee", "Food", "Events", "Soccer-focused space"],
+  best_for: ["Friends", "Groups", "Watching sports"]
+},
+{
+  id: "maman-upper-west-side",
+  name: "Maman",
+  address: "429 Amsterdam Ave, New York, NY",
+  lat: 40.7842,
+  lng: -73.9776,
+  website: "https://mamannyc.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["social", "relax"],
+  moment_note: "Charming café for a relaxed morning or coffee with a friend.",
+
+  vibe: ["Charming", "Warm", "French-inspired"],
+  features: ["Indoor seating", "Outdoor seating", "Breakfast", "Brunch"],
+  best_for: ["Coffee dates", "Brunch", "Catching up"]
+},
+{
+  id: "bluestone-lane-upper-west-side",
+  name: "Bluestone Lane",
+  address: "417 Amsterdam Ave, New York, NY",
+  lat: 40.7839,
+  lng: -73.9778,
+  website: "https://bluestonelane.com",
+  neighborhood: "Upper West Side",
+
+  moments: ["social", "relax"],
+  moment_note: "Australian-style café for an easy coffee, brunch, or casual catch-up.",
+
+  vibe: ["Relaxed", "Polished", "Australian-inspired"],
+  features: ["Banquette seating", "Full-service café", "Breakfast", "Brunch"],
+  best_for: ["Brunch", "Coffee dates", "Casual meals"]
+},
+{
+  id: "daily-provisions-upper-west-side",
+  name: "Daily Provisions",
+  address: "375 Amsterdam Ave, New York, NY",
+  lat: 40.7822,
+  lng: -73.9788,
+  website: "https://www.dailyprovisions.co",
+  neighborhood: "Upper West Side",
+  
+  moments: ["quick", "social"],
+  moment_note: "All-day neighborhood café for a morning coffee, pastry, or casual meet-up.",
+  
+  vibe: ["Lively", "Casual", "Neighborhood"],
+  features: ["All-day food", "Bakery", "Coffee", "Pickup"],
+  best_for: ["Breakfast", "Quick coffee", "Casual meals"]
   },
   {
     id: "sant-ambroeus-madison",
@@ -2616,6 +2741,50 @@ function renderSelectedVenue(loc){
     `)
     .join("");
 
+  const vibe = Array.isArray(loc.vibe)
+  ? loc.vibe
+  : [];
+
+const features = Array.isArray(loc.features)
+  ? loc.features
+  : [];
+
+const bestFor = Array.isArray(loc.best_for)
+  ? loc.best_for
+  : [];
+
+const detailGroup = (label, items, className = "") => {
+  if (!items.length) return "";
+
+  const chips = items
+    .map(item => `
+      <span class="selected-detail-chip">
+        ${item}
+      </span>
+    `)
+    .join("");
+
+  return `
+    <div class="selected-detail-group ${className}">
+      <div class="selected-detail-label">
+        ${label}
+      </div>
+
+      <div class="selected-detail-items">
+        ${chips}
+      </div>
+    </div>
+  `;
+};
+
+const venueDetails = [
+  detailGroup("Vibe", vibe),
+  detailGroup("Features", features),
+  detailGroup("Best for", bestFor, "best-for")
+]
+  .filter(Boolean)
+  .join("");
+  
   const hasImage =
     typeof loc.imageUrl === "string" &&
     loc.imageUrl.trim().length > 0;
@@ -2716,7 +2885,16 @@ function renderSelectedVenue(loc){
           `
           : ""
         }
-
+        
+        ${venueDetails
+          ? `
+            <div class="selected-venue-details">
+              ${venueDetails}
+            </div>
+          `
+          : ""
+        }
+        
         <div class="selected-venue-actions">
 
           ${web
