@@ -492,6 +492,13 @@ body.map-ready #map {
   -webkit-overflow-scrolling: touch;
 
   padding: 0 0 10px;
+
+  /* Hide scrollbar while keeping scrolling */
+  scrollbar-width: none;
+}
+
+#panel-body::-webkit-scrollbar {
+  display: none;
 }
 
 
@@ -811,7 +818,7 @@ body.map-ready #map {
   position: relative;
 
   width: 100%;
-  height: 150px;
+  height: 210px;
 
   overflow: hidden;
 
@@ -1390,12 +1397,12 @@ body.ss-embed #filters {
 ========================================================= */
 
 body.venue-detail-open {
-  --map-height: 34vh;
+  --map-height: 44vh;
 }
 
 @supports (height: 100dvh) {
   body.venue-detail-open {
-    --map-height: 34dvh;
+    --map-height: 44dvh;
   }
 }
 
@@ -1418,13 +1425,6 @@ body.venue-detail-open #panel-body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
-
-
-/* Detail sheet should stay Brew Break dark */
-body.venue-detail-open .selected-venue-card {
-  min-height: 100%;
-}
-
 
 /* Venue detail typography on dark background */
 body.venue-detail-open .selected-venue-name {
