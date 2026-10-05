@@ -816,11 +816,12 @@ body.map-ready #map {
 
 .selected-venue-image-wrap {
   position: relative;
-
   width: 100%;
   height: 210px;
+  margin-top: -8px;
 
   overflow: hidden;
+  border-radius: 22px 22px 0 0;
 
   background:
     linear-gradient(
@@ -854,8 +855,12 @@ body.map-ready #map {
   background:
     linear-gradient(
       180deg,
-      transparent 50%,
-      rgba(42, 33, 29, .14) 100%
+      rgba(74, 65, 61, .28) 0%,
+      rgba(74, 65, 61, .12) 12%,
+      transparent 30%,
+      transparent 68%,
+      rgba(42, 33, 29, .08) 84%,
+      rgba(42, 33, 29, .28) 100%
     );
 }
 
@@ -905,7 +910,7 @@ body.map-ready #map {
 ------------------------- */
 
 .selected-venue-content {
-  padding: 16px 20px 0;
+  padding: 14px 20px 0;
 }
 
 .selected-venue-top {
@@ -951,7 +956,7 @@ body.map-ready #map {
 
 .selected-venue-note {
   max-width: 340px;
-  margin-top: 11px;
+  margin-top: 9px;
 
   color: rgba(61, 47, 41, .68);
 
