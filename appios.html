@@ -465,13 +465,11 @@ body.map-ready #map {
       #291F1B 100%
     );
 
-  border-radius: 22px 22px 0 0;
+  border-radius: 0;
 
-  border-top:
-    1px solid rgba(255, 249, 243, .07);
-
-  box-shadow:
-    0 -12px 32px rgba(24, 17, 14, .20);
+  border-top: 0;
+  
+  box-shadow: none;
 
   overflow: hidden;
 }
@@ -806,35 +804,46 @@ body.map-ready #map {
 ========================================================= */
 
 .selected-venue-card {
+  position: relative;
   padding: 0 0 22px;
 }
 
 
 /* -------------------------
    IMAGE
+   Map → photo → espresso
 ------------------------- */
 
 .selected-venue-image-wrap {
   position: relative;
-  width: 100%;
-  height: 220px;
 
-  /* Pull photo farther upward into the map */
-  margin-top: -26px;
+  width: 100%;
+  height: 225px;
+
+  /*
+    Pull the image underneath the bottom edge of the map.
+    This overlap is what removes the visible "panel starts here" line.
+  */
+  margin-top: -34px;
 
   overflow: hidden;
 
-  /* Don't visually emphasize the top edge */
+  /*
+    IMPORTANT:
+    No rounded top corners and no border.
+    The image should feel like part of the map.
+  */
+  border: 0;
   border-radius: 0;
+  box-shadow: none;
 
-  background:
-    linear-gradient(
-      135deg,
-      #B9AAA1 0%,
-      #8E7B70 48%,
-      #655248 100%
-    );
+  background: transparent;
 }
+
+
+/*
+   Actual café image
+*/
 
 .selected-venue-image {
   display: block;
@@ -843,30 +852,52 @@ body.map-ready #map {
   height: 100%;
 
   object-fit: cover;
+  object-position: center;
 
+  /*
+    Fade the actual photograph in from transparent.
+    This allows the map underneath to visually continue
+    into the first part of the photo.
+  */
   -webkit-mask-image:
     linear-gradient(
       to bottom,
+
       transparent 0%,
-      rgba(0,0,0,.25) 5%,
-      rgba(0,0,0,.65) 13%,
-      #000 25%,
+      rgba(0,0,0,.08) 4%,
+      rgba(0,0,0,.22) 8%,
+      rgba(0,0,0,.48) 14%,
+      rgba(0,0,0,.76) 20%,
+      #000 28%,
       #000 100%
     );
 
   mask-image:
     linear-gradient(
       to bottom,
+
       transparent 0%,
-      rgba(0,0,0,.25) 5%,
-      rgba(0,0,0,.65) 13%,
-      #000 25%,
+      rgba(0,0,0,.08) 4%,
+      rgba(0,0,0,.22) 8%,
+      rgba(0,0,0,.48) 14%,
+      rgba(0,0,0,.76) 20%,
+      #000 28%,
       #000 100%
     );
 }
 
 
-/* Soft fade into panel */
+/*
+   ONE atmospheric overlay.
+
+   Top:
+   transparent so we see the actual map through the
+   masked photograph.
+
+   Bottom:
+   gradually becomes the exact espresso surface used
+   by the venue panel.
+*/
 
 .selected-venue-image-wrap::after {
   content: "";
@@ -879,25 +910,20 @@ body.map-ready #map {
 
   background:
     linear-gradient(
-      180deg,
+      to bottom,
 
-      /* Blend the photo into the map above */
-      rgba(238, 239, 243, .92) 0%,
-      rgba(238, 239, 243, .68) 7%,
-      rgba(238, 239, 243, .36) 14%,
-      rgba(238, 239, 243, .12) 21%,
-      rgba(238, 239, 243, 0) 30%,
+      rgba(48, 37, 31, 0) 0%,
+      rgba(48, 37, 31, 0) 48%,
 
-      /* Keep center of image clear */
-      rgba(42, 33, 29, 0) 70%,
-
-      /* Gentle transition into espresso panel */
-      rgba(42, 33, 29, .10) 84%,
-      rgba(42, 33, 29, .28) 100%
+      rgba(48, 37, 31, .04) 60%,
+      rgba(48, 37, 31, .12) 70%,
+      rgba(48, 37, 31, .28) 80%,
+      rgba(48, 37, 31, .55) 90%,
+      rgba(48, 37, 31, .88) 97%,
+      #30251F 100%
     );
 }
-
-
+    
 /* Favorite over image */
 
 .selected-fav {
@@ -1449,7 +1475,7 @@ body.venue-detail-open #map {
 }
 
 body.venue-detail-open #bottom-panel {
-  margin-top: -18px;
+  margin-top: -30px;
 
   transition:
     margin-top .38s cubic-bezier(.22, .8, .25, 1);
@@ -2729,32 +2755,79 @@ window.SipSober.sendVenuesToNative=function(arg){
 window.addEventListener("load",()=>setTimeout(()=>window.SipSober.sendVenuesToNative(),400));
 
 /* ─── RENDERERS ────────────────────────────────────────────────── */
-function renderMarkers(data){
-  if(!markersLayer) return{count:0,bounds:null};
-  markersLayer.clearLayers(); clearActiveMarker(); markersById={};
-  const bounds=L.latLngBounds([]);
-  data.forEach(loc=>{
-    const m=L.marker([loc.lat,loc.lng]).addTo(markersLayer);
+function renderMarkers(data) {
+  if (!markersLayer) return { count: 0, bounds: null };
+
+  markersLayer.clearLayers();
+  clearActiveMarker();
+  markersById = {};
+
+  const bounds = L.latLngBounds([]);
+
+  data.forEach(loc => {
+    const m = L.marker([loc.lat, loc.lng]).addTo(markersLayer);
+
     m.on("click", () => {
-    setActiveMarker(m);
-    renderSelectedVenue(loc);
-  
-    m.bindTooltip(loc.name || "", {
-      permanent: false,
-      direction: "top",
-      offset: [0, -16],
-      opacity: 1,
-      className: "brewbreak-pin-label"
-    }).openTooltip();
+      const ll = m.getLatLng();
+
+      // Prevent another render from changing the map view
+      _suppressAutoFit = true;
+
+      // Select this venue
+      setActiveMarker(m);
+      _lastFocusedVenueId = String(loc.id || "");
+
+      // Open detail first so the map changes to detail height
+      renderSelectedVenue(loc);
+
+      // Wait for the new map height to finish laying out,
+      // then zoom directly into the selected café.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!map) return;
+
+          map.invalidateSize({
+            animate: false,
+            pan: false
+          });
+
+          map.flyTo(
+            [ll.lat, ll.lng],
+            16,
+            {
+              animate: true,
+              duration: 0.45,
+              easeLinearity: 0.25
+            }
+          );
+
+          m.bindTooltip(loc.name || "", {
+            permanent: false,
+            direction: "top",
+            offset: [0, -16],
+            opacity: 1,
+            className: "brewbreak-pin-label"
+          }).openTooltip();
+
+          _suppressAutoFit = false;
+        });
+      });
+    });
+
+    if (loc.id) {
+      markersById[String(loc.id)] = m;
+    }
+
+    bounds.extend([loc.lat, loc.lng]);
   });
-    if(loc.id) markersById[String(loc.id)]=m;
-    
-    bounds.extend([loc.lat,loc.lng]);
-  });
-  return{count:data.length,bounds:data.length?bounds:null};
+
+  return {
+    count: data.length,
+    bounds: data.length ? bounds : null
+  };
 }
 
-function renderList(data){
+function renderList(data) {
   const results = document.getElementById("results");
   const rc = document.getElementById("results-count");
 
