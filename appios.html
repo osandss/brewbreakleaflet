@@ -881,25 +881,26 @@ body.map-ready #map {
   pointer-events: none;
 
   /*
-    Café photo → espresso panel
-    Soft, extended ombré like the mockup.
+    MAP → CAFÉ PHOTO OMBRÉ
+
+    Strongest at the TOP of the café image,
+    then gradually disappears so the rest
+    of the photo stays completely clear.
   */
   background:
     linear-gradient(
       to bottom,
 
-      transparent 0%,
-      transparent 50%,
-
-      rgba(53, 41, 35, .03) 58%,
-      rgba(53, 41, 35, .08) 64%,
-      rgba(53, 41, 35, .16) 70%,
-      rgba(53, 41, 35, .27) 76%,
-      rgba(53, 41, 35, .42) 82%,
-      rgba(53, 41, 35, .58) 87%,
-      rgba(53, 41, 35, .72) 92%,
-      rgba(53, 41, 35, .86) 96%,
-      #352923 100%
+      rgba(238, 239, 243, .98) 0%,
+      rgba(238, 239, 243, .92) 5%,
+      rgba(238, 239, 243, .80) 10%,
+      rgba(238, 239, 243, .62) 16%,
+      rgba(238, 239, 243, .43) 22%,
+      rgba(238, 239, 243, .26) 28%,
+      rgba(238, 239, 243, .12) 34%,
+      rgba(238, 239, 243, .04) 40%,
+      rgba(238, 239, 243, 0) 46%,
+      rgba(238, 239, 243, 0) 100%
     );
 }
     
