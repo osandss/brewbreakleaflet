@@ -854,36 +854,9 @@ body.map-ready #map {
   object-fit: cover;
   object-position: center;
 
-  /*
-    Fade the actual photograph in from transparent.
-    This allows the map underneath to visually continue
-    into the first part of the photo.
-  */
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-
-      transparent 0%,
-      rgba(0,0,0,.08) 4%,
-      rgba(0,0,0,.22) 8%,
-      rgba(0,0,0,.48) 14%,
-      rgba(0,0,0,.76) 20%,
-      #000 28%,
-      #000 100%
-    );
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-
-      transparent 0%,
-      rgba(0,0,0,.08) 4%,
-      rgba(0,0,0,.22) 8%,
-      rgba(0,0,0,.48) 14%,
-      rgba(0,0,0,.76) 20%,
-      #000 28%,
-      #000 100%
-    );
+  /* No mask on the photo itself */
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 
@@ -908,19 +881,22 @@ body.map-ready #map {
   z-index: 1;
   pointer-events: none;
 
+  /*
+    Fade ONLY at the top:
+    pale map → café photo.
+  */
   background:
     linear-gradient(
       to bottom,
 
-      rgba(48, 37, 31, 0) 0%,
-      rgba(48, 37, 31, 0) 48%,
-
-      rgba(48, 37, 31, .04) 60%,
-      rgba(48, 37, 31, .12) 70%,
-      rgba(48, 37, 31, .28) 80%,
-      rgba(48, 37, 31, .55) 90%,
-      rgba(48, 37, 31, .88) 97%,
-      #30251F 100%
+      rgba(238, 239, 243, .96) 0%,
+      rgba(238, 239, 243, .82) 5%,
+      rgba(238, 239, 243, .58) 11%,
+      rgba(238, 239, 243, .34) 17%,
+      rgba(238, 239, 243, .16) 23%,
+      rgba(238, 239, 243, .05) 28%,
+      rgba(238, 239, 243, 0) 34%,
+      rgba(238, 239, 243, 0) 100%
     );
 }
     
