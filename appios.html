@@ -874,7 +874,6 @@ body.map-ready #map {
 
 .selected-venue-image-wrap::after {
   content: "";
-
   position: absolute;
   inset: 0;
 
@@ -882,21 +881,25 @@ body.map-ready #map {
   pointer-events: none;
 
   /*
-    Fade ONLY at the top:
-    pale map → café photo.
+    Café photo → espresso panel
+    Soft, extended ombré like the mockup.
   */
   background:
     linear-gradient(
       to bottom,
 
-      rgba(238, 239, 243, .96) 0%,
-      rgba(238, 239, 243, .82) 5%,
-      rgba(238, 239, 243, .58) 11%,
-      rgba(238, 239, 243, .34) 17%,
-      rgba(238, 239, 243, .16) 23%,
-      rgba(238, 239, 243, .05) 28%,
-      rgba(238, 239, 243, 0) 34%,
-      rgba(238, 239, 243, 0) 100%
+      transparent 0%,
+      transparent 50%,
+
+      rgba(53, 41, 35, .03) 58%,
+      rgba(53, 41, 35, .08) 64%,
+      rgba(53, 41, 35, .16) 70%,
+      rgba(53, 41, 35, .27) 76%,
+      rgba(53, 41, 35, .42) 82%,
+      rgba(53, 41, 35, .58) 87%,
+      rgba(53, 41, 35, .72) 92%,
+      rgba(53, 41, 35, .86) 96%,
+      #352923 100%
     );
 }
     
