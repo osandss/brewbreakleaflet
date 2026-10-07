@@ -817,7 +817,8 @@ body.map-ready #map {
 
 .selected-venue-card {
   position: relative;
-  padding: 0 0 22px;
+  padding: 0;
+  background: transparent;
 }
 
 
@@ -949,7 +950,23 @@ body.map-ready #map {
 ------------------------- */
 
 .selected-venue-content {
-  padding: 14px 20px 0;
+  position: relative;
+  z-index: 2;
+
+  padding: 14px 20px 22px;
+
+  background:
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(154, 120, 100, .14),
+      transparent 38%
+    ),
+    linear-gradient(
+      160deg,
+      #352923 0%,
+      #30251F 46%,
+      #291F1B 100%
+    );
 }
 
 .selected-venue-top {
@@ -1527,6 +1544,8 @@ body.venue-detail-open #bottom-panel {
 body.venue-detail-open #panel-body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+
+  background: transparent;
 }
 
 /* Venue detail typography on dark background */
