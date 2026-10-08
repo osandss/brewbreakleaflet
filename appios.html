@@ -935,12 +935,12 @@ body.map-ready #map {
 }
 
 .selected-venue-address {
-  margin-top: 3px;
-  color: rgba(234, 221, 212, .56);
+  margin-top: 5px;
+  color: rgba(255, 249, 243, .88);
 
-  font-size: 11px;
-  font-weight: 450;
-  line-height: 1.35;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .selected-venue-note {
@@ -1597,6 +1597,67 @@ body.venue-detail-open
   border-color: rgba(255,249,243,.08);
 }
 
+/* =========================================
+   VENUE DETAIL — FIXED HANDLE + SCROLL FADE
+========================================= */
+
+/* Remove the pale fade attached to the moving photo */
+.selected-venue-image-wrap::after {
+  display: none;
+}
+
+/* Fixed overlay at the top of the detail panel */
+body.venue-detail-open #bottom-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 62px;
+  z-index: 20;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(238, 239, 243, .88) 0%,
+    rgba(238, 239, 243, .55) 28%,
+    rgba(238, 239, 243, .18) 65%,
+    transparent 100%
+  );
+
+  transition: background .25s ease;
+}
+
+/* The handle stays in place while details scroll */
+body.venue-detail-open #bottom-panel::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 38px;
+  height: 4px;
+  border-radius: 999px;
+
+  background: rgba(61, 47, 41, .55);
+  z-index: 21;
+  pointer-events: none;
+}
+
+/* Once the photo scrolls away, use espresso instead */
+body.venue-detail-open.venue-scrolled #bottom-panel::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(48, 37, 31, 1) 0%,
+    rgba(48, 37, 31, .92) 40%,
+    rgba(48, 37, 31, 0) 100%
+  );
+}
+
+body.venue-detail-open.venue-scrolled #bottom-panel::after {
+  background: rgba(255, 249, 243, .65);
+}
     
 </style>
 
@@ -3842,6 +3903,26 @@ if (!window.SipSober.isEmbed) {
         (a.name || "").localeCompare(b.name || "")
       )
   );
+}
+
+/* =========================================
+   VENUE DETAIL — SCROLL-AWARE HEADER
+========================================= */
+
+const venueScrollPanel = document.getElementById("panel-body");
+
+if (venueScrollPanel) {
+  venueScrollPanel.addEventListener("scroll", () => {
+    if (!document.body.classList.contains("venue-detail-open")) {
+      document.body.classList.remove("venue-scrolled");
+      return;
+    }
+
+    document.body.classList.toggle(
+      "venue-scrolled",
+      venueScrollPanel.scrollTop > 120
+    );
+  }, { passive: true });
 }
   
 </script>
