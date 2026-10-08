@@ -1580,16 +1580,28 @@ body.venue-detail-open
   display: none;
 }
 
-/* Fixed espresso handle area */
 #bottom-panel #panel-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 24px;
-  height: 24px;
-  position: relative;
-  z-index: 20;
-  background: #30251F;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 34px;
+  z-index: 30;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(42, 33, 29, .78) 0%,
+    rgba(42, 33, 29, .38) 55%,
+    transparent 100%
+  );
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Handle button */
@@ -1616,11 +1628,6 @@ body.venue-detail-open
   height: 4px;
   border-radius: 999px;
   background: rgba(255, 249, 243, .55);
-}
-
-/* Keep identical styling when a café is selected */
-body.venue-detail-open #bottom-panel #panel-header {
-  background: #30251F;
 }
     
 </style>
