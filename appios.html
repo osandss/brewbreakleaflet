@@ -826,7 +826,7 @@ body.map-ready #map {
 .selected-venue-image-wrap {
   position: relative;
   width: 100%;
-  height: 205px;
+  height: 270px;
   margin-top: -34px;
   overflow: hidden;
 
@@ -918,11 +918,11 @@ body.map-ready #map {
   margin: 0;
 
   color: #FFF9F3;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
 
-  line-height: 1.12;
-  letter-spacing: -.035em;
+  line-height: 1.2;
+  letter-spacing: -.025em;
 }
 
 .selected-venue-meta {
@@ -987,110 +987,50 @@ body.map-ready #map {
   text-transform: uppercase;
 }
 
-/* -------------------------
-   VENUE DETAILS — COLLAPSIBLE
-------------------------- */
+/* =========================================
+   VENUE DETAILS — ALWAYS VISIBLE
+========================================= */
 
 .selected-venue-details {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 249, 243, .12);
+}
+
+.selected-details-heading {
+  margin-bottom: 15px;
+  color: #FFF9F3;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -.3px;
+}
+
+.selected-details-list {
   display: flex;
   flex-direction: column;
-
-  margin-top: 16px;
-  border-top: 1px solid rgba(255, 249, 243, .07);
+  gap: 10px;
 }
 
-
-/* Individual row */
-
-.selected-detail-group {
-  display: block;
-
-  border-bottom: 1px solid rgba(255, 249, 243, .07);
-}
-
-
-/* Clickable heading */
-
-.selected-detail-toggle {
-  appearance: none;
-  -webkit-appearance: none;
-
-  width: 100%;
-  min-height: 44px;
-
+.selected-details-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-
+  align-items: flex-start;
   gap: 12px;
-  padding: 0;
-
-  border: 0;
-  background: transparent;
-
-  font-family: inherit;
-  text-align: left;
-
-  cursor: pointer;
+  padding: 13px 14px;
+  border: 1px solid rgba(255, 249, 243, .08);
+  border-radius: 12px;
+  background: rgba(255, 249, 243, .045);
+  color: rgba(255, 249, 243, .84);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-
-.selected-detail-label {
-  color: rgba(232, 213, 197, .48);
-
-  font-size: 8.5px;
-  font-weight: 700;
-
-  letter-spacing: .15em;
-  text-transform: uppercase;
-}
-
-
-/* Arrow */
-
-.selected-detail-arrow {
-  color: rgba(255, 249, 243, .38);
-
-  font-size: 15px;
-  font-weight: 400;
-
-  line-height: 1;
-  transition: transform .22s ease;
-}
-
-
-/* Hidden content */
-
-.selected-detail-content {
-  display: none;
-  padding: 0 0 13px;
-}
-
-
-/* Open state */
-
-.selected-detail-group.is-open .selected-detail-content {
-  display: block;
-}
-
-.selected-detail-group.is-open .selected-detail-arrow {
-  transform: rotate(180deg);
-}
-
-/* Detail copy */
-
-.selected-detail-text {
-  max-width: 340px;
-
-  color: rgba(242, 232, 224, .67);
-  font-size: 11.5px;
-  font-weight: 450;
-
-  line-height: 1.45;
-}
-
-.selected-detail-group.best-for .selected-detail-text {
-  color: rgba(225, 166, 127, .84);
+.selected-details-dot {
+  flex: 0 0 6px;
+  width: 6px;
+  height: 6px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: #C88A62;
 }
   
 
@@ -1491,7 +1431,7 @@ body.venue-detail-open .selected-venue-meta {
 }
 
 body.venue-detail-open .selected-venue-note {
-  color: rgba(242, 232, 224, .74);
+  color: rgba(225, 210, 199, .64);
 }
 
 body.venue-detail-open .selected-venue-moment {
@@ -3136,50 +3076,39 @@ function renderSelectedVenue(loc){
     `)
     .join("");
 
-  const features = Array.isArray(loc.features)
+  /* ---------------------------------
+   VENUE DETAILS — NO DUPLICATION
+--------------------------------- */
+
+const features = Array.isArray(loc.features)
   ? loc.features
   : [];
 
-const bestFor = Array.isArray(loc.best_for)
-  ? loc.best_for
-  : [];
+const uniqueFeatures = [
+  ...new Set(
+    features
+      .filter(item => typeof item === "string")
+      .map(item => item.trim())
+      .filter(Boolean)
+  )
+];
 
-const detailGroup = (label, items, className = "") => {
-  if (!items.length) return "";
-
-  return `
-    <div class="selected-detail-group selected-detail-collapsible ${className}">
-
-      <button
-        class="selected-detail-toggle"
-        type="button"
-        aria-expanded="false"
-      >
-        <span class="selected-detail-label">
-          ${label}
-        </span>
-
-        <span class="selected-detail-arrow">
-          ⌄
-        </span>
-      </button>
-
-      <div class="selected-detail-content">
-        <div class="selected-detail-text">
-          ${items.join(" · ")}
-        </div>
-      </div>
-
+const venueDetails = uniqueFeatures.length
+  ? `
+    <div class="selected-details-heading">
+      The Details
     </div>
-  `;
-};
 
-const venueDetails = [
-  detailGroup("Good to know", features),
-  detailGroup("Best for", bestFor, "best-for")
-]
-  .filter(Boolean)
-  .join("");
+    <div class="selected-details-list">
+      ${uniqueFeatures.map(feature => `
+        <div class="selected-details-item">
+          <span class="selected-details-dot"></span>
+          <span>${feature}</span>
+        </div>
+      `).join("")}
+    </div>
+  `
+  : "";
 
   
   const hasImage =
