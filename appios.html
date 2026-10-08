@@ -818,41 +818,26 @@ body.map-ready #map {
 }
 
 
-/* -------------------------
-   IMAGE
+/* =========================================================
+   SELECTED VENUE IMAGE
    Map → photo → espresso
-------------------------- */
+========================================================= */
 
 .selected-venue-image-wrap {
   position: relative;
-
   width: 100%;
   height: 205px;
-
-  /*
-    Pull the image underneath the bottom edge of the map.
-    This overlap is what removes the visible "panel starts here" line.
-  */
   margin-top: -34px;
-
   overflow: hidden;
 
-  /*
-    IMPORTANT:
-    No rounded top corners and no border.
-    The image should feel like part of the map.
-  */
   border: 0;
   border-radius: 0;
   box-shadow: none;
-
   background: transparent;
 }
 
 
-/*
-   Actual café image
-*/
+/* Café photo */
 
 .selected-venue-image {
   display: block;
@@ -863,47 +848,12 @@ body.map-ready #map {
   object-fit: cover;
   object-position: center;
 
-  /* No mask on the photo itself */
   -webkit-mask-image: none;
   mask-image: none;
 }
 
-
-/*
-   ONE atmospheric overlay.
-
-   Top:
-   transparent so we see the actual map through the
-   masked photograph.
-
-   Bottom:
-   gradually becomes the exact espresso surface used
-   by the venue panel.
-*/
-
-.selected-venue-image-wrap::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(238, 239, 243, 1) 0%,
-      rgba(238, 239, 243, .94) 6%,
-      rgba(238, 239, 243, .80) 12%,
-      rgba(238, 239, 243, .62) 18%,
-      rgba(238, 239, 243, .42) 24%,
-      rgba(238, 239, 243, .24) 30%,
-      rgba(238, 239, 243, .10) 36%,
-      rgba(238, 239, 243, .03) 42%,
-      transparent 48%
-    );
-}
     
-/* Favorite over image */
+/* Favorite button over photo */
 
 .selected-fav {
   position: absolute;
@@ -1522,6 +1472,32 @@ body.venue-detail-open #bottom-panel {
 
   transition:
     margin-top .38s cubic-bezier(.22, .8, .25, 1);
+}
+
+/* Light ombré stays fixed while café photo scrolls */
+body.venue-detail-open #bottom-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+
+  z-index: 5;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(238, 239, 243, 1) 0%,
+    rgba(238, 239, 243, .94) 12%,
+    rgba(238, 239, 243, .80) 25%,
+    rgba(238, 239, 243, .62) 38%,
+    rgba(238, 239, 243, .42) 50%,
+    rgba(238, 239, 243, .24) 62%,
+    rgba(238, 239, 243, .10) 75%,
+    rgba(238, 239, 243, .03) 88%,
+    transparent 100%
+  );
 }
 
 body.venue-detail-open #panel-body {
