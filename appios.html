@@ -1474,28 +1474,6 @@ body.venue-detail-open #bottom-panel {
     margin-top .38s cubic-bezier(.22, .8, .25, 1);
 }
 
-/* Light ombré stays fixed while café photo scrolls */
-body.venue-detail-open #bottom-panel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-
-  z-index: 5;
-  pointer-events: none;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(42, 33, 29, .88) 0%,
-    rgba(42, 33, 29, .68) 25%,
-    rgba(42, 33, 29, .38) 55%,
-    rgba(42, 33, 29, .12) 80%,
-    transparent 100%
-  );
-}
-
 body.venue-detail-open #panel-body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -1594,65 +1572,55 @@ body.venue-detail-open
 }
 
 /* =========================================
-   VENUE DETAIL — FIXED HANDLE + SCROLL FADE
+   BREW BREAK — CONSISTENT PANEL HANDLE
 ========================================= */
 
-/* Remove the pale fade attached to the moving photo */
+/* Remove the old photo fade */
 .selected-venue-image-wrap::after {
   display: none;
 }
 
-/* Fixed overlay at the top of the detail panel */
-body.venue-detail-open #bottom-panel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 62px;
+/* Fixed espresso handle area */
+#bottom-panel #panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 24px;
+  height: 24px;
+  position: relative;
   z-index: 20;
-  pointer-events: none;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(238, 239, 243, .88) 0%,
-    rgba(238, 239, 243, .55) 28%,
-    rgba(238, 239, 243, .18) 65%,
-    transparent 100%
-  );
-
-  transition: background .25s ease;
+  background: #30251F;
 }
 
-/* The handle stays in place while details scroll */
-body.venue-detail-open #bottom-panel::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+/* Handle button */
+#bottom-panel #panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
 
+/* Hide the old label */
+#bottom-panel #panel-toggle .label {
+  display: none;
+}
+
+/* Style the existing handle */
+#bottom-panel #panel-toggle .handle {
+  display: block;
   width: 38px;
   height: 4px;
   border-radius: 999px;
-
-  background: rgba(61, 47, 41, .55);
-  z-index: 21;
-  pointer-events: none;
+  background: rgba(255, 249, 243, .55);
 }
 
-/* Once the photo scrolls away, use espresso instead */
-body.venue-detail-open.venue-scrolled #bottom-panel::before {
-  background: linear-gradient(
-    to bottom,
-    rgba(48, 37, 31, 1) 0%,
-    rgba(48, 37, 31, .92) 40%,
-    rgba(48, 37, 31, 0) 100%
-  );
-}
-
-body.venue-detail-open.venue-scrolled #bottom-panel::after {
-  background: rgba(255, 249, 243, .65);
+/* Keep identical styling when a café is selected */
+body.venue-detail-open #bottom-panel #panel-header {
+  background: #30251F;
 }
     
 </style>
