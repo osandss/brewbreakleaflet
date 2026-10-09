@@ -654,56 +654,42 @@ body.map-ready #map {
   padding: 0 22px 24px;
 }
 
-
 .venue-browser-list {
   display: flex;
   flex-direction: column;
-
-  gap: 10px;
+  gap: 0;
 }
-
 
 .venue-browse-card {
   appearance: none;
   -webkit-appearance: none;
 
   width: 100%;
-
-  padding: 15px 16px;
+  padding: 17px 0;
 
   display: block;
 
-  border:
-    1px solid rgba(255, 249, 243, .065);
+  border: 0;
+  border-bottom: 1px solid rgba(255, 249, 243, .10);
+  border-radius: 0;
 
-  border-radius: 17px;
-
-  background:
-    rgba(255, 249, 243, .035);
+  background: transparent;
 
   font-family: inherit;
   text-align: left;
 
   cursor: pointer;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .025);
+  box-shadow: none;
 
   transition:
-    transform .16s ease,
-    background .16s ease,
-    border-color .16s ease;
+    opacity .16s ease,
+    background .16s ease;
 }
 
-
 .venue-browse-card:active {
-  transform: scale(.985);
-
-  background:
-    rgba(255, 249, 243, .06);
-
-  border-color:
-    rgba(255, 249, 243, .09);
+  transform: none;
+  background: rgba(255, 249, 243, .025);
+  opacity: .75;
 }
 
 
