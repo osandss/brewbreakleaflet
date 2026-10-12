@@ -1475,10 +1475,26 @@ body.venue-detail-open
    BREW BREAK — CONSISTENT PANEL HANDLE
 ========================================= */
 
-/* Remove the old photo fade */
 .selected-venue-image-wrap::after {
-  display: none;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(42, 33, 29, .38) 0%,
+    rgba(42, 33, 29, .12) 55%,
+    transparent 100%
+  );
+
+  pointer-events: none;
+  z-index: 1;
 }
+
 
 #bottom-panel #panel-header {
   display: flex;
@@ -1495,13 +1511,13 @@ body.venue-detail-open
 
   background: linear-gradient(
     to bottom,
-    rgba(42, 33, 29, .78) 0%,
-    rgba(42, 33, 29, .38) 55%,
+    rgba(42, 33, 29, .62) 0%,
+    rgba(42, 33, 29, .28) 55%,
     transparent 100%
   );
 
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Handle button */
