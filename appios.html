@@ -248,7 +248,7 @@ body.map-ready #map {
   align-items: center;
   justify-content: flex-start;
 
-  gap: 16px;
+  gap: 12px;
 
   overflow-x: auto;
   scrollbar-width: none;
@@ -1588,6 +1588,14 @@ body.panel-snapping #bottom-panel {
   transition: margin-top .32s cubic-bezier(.22,.8,.25,1);
 }
 
+/* =========================================
+   HIDE WEB CONTROLS IN BREW BREAK IOS APP
+========================================= */
+
+body.ss-embed #locateBtn,
+body.ss-embed #resetBtn {
+    display: none !important;
+}
     
 </style>
 
