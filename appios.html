@@ -1558,6 +1558,47 @@ body.venue-detail-open
   border-radius: 999px;
   background: rgba(255, 249, 243, .55);
 }
+
+
+/* =========================================
+   DRAGGABLE BOTTOM PANEL
+========================================= */
+
+#bottom-panel #panel-header {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#bottom-panel #panel-header:active {
+  cursor: grabbing;
+}
+
+#bottom-panel #panel-toggle {
+  cursor: inherit;
+  touch-action: none;
+}
+
+#map {
+  transition: none;
+}
+
+/* Disable animation while dragging */
+body.panel-dragging #map,
+body.panel-dragging #bottom-panel {
+  transition: none !important;
+}
+
+/* Smooth snapping when released */
+body.panel-snapping #map {
+  transition: height .32s cubic-bezier(.22,.8,.25,1);
+}
+
+body.panel-snapping #bottom-panel {
+  transition: margin-top .32s cubic-bezier(.22,.8,.25,1);
+}
+
     
 </style>
 
@@ -3727,27 +3768,186 @@ resetBtn?.addEventListener("click", e => {
   resetMapToDefault();
 });
   
+
+/* =========================================
+   DRAGGABLE BOTTOM PANEL
+========================================= */
+
 (() => {
   const panel = document.getElementById("bottom-panel");
+  const header = document.getElementById("panel-header");
   const toggle = document.getElementById("panel-toggle");
   const label = toggle?.querySelector(".label");
-  if (!panel || !toggle) return;
+  const mapElement = document.getElementById("map");
 
-  function syncLabel() {
-    const ex = panel.classList.contains("expanded");
-    toggle.setAttribute("aria-expanded", ex ? "true" : "false");
-    if (label) label.textContent = ex ? "Hide" : "Show";
+  if (!panel || !header || !toggle || !mapElement) return;
+
+  const positions = {
+    expanded: 0.30,
+    middle: 0.52,
+    collapsed: 0.72
+  };
+
+  let currentPosition = "collapsed";
+  let dragging = false;
+  let startY = 0;
+  let startHeight = 0;
+  let didMove = false;
+  let snapTimer = null;
+
+  function viewportHeight() {
+    return window.innerHeight;
   }
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function setMapHeight(height) {
+    const min = viewportHeight() * positions.expanded;
+    const max = viewportHeight() * positions.collapsed;
+
+    const next = clamp(height, min, max);
+
+    document.documentElement.style.setProperty(
+      "--map-height",
+      `${next}px`
+    );
+
+    mapElement.style.height = `${next}px`;
+    mapElement.style.minHeight = "0";
+    mapElement.style.maxHeight = "none";
+
+    if (map) {
+      map.invalidateSize({
+        animate: false,
+        pan: false
+      });
+    }
+  }
+
+  function updateLabel() {
+    const expanded = currentPosition !== "collapsed";
+
+    panel.classList.toggle("expanded", expanded);
+
+    toggle.setAttribute(
+      "aria-expanded",
+      expanded ? "true" : "false"
+    );
+
+    if (label) {
+      label.textContent = expanded ? "Hide" : "Show";
+    }
+  }
+
+  function snapTo(position) {
+    currentPosition = position;
+
+    document.body.classList.remove("panel-dragging");
+    document.body.classList.add("panel-snapping");
+
+    setMapHeight(
+      viewportHeight() * positions[position]
+    );
+
+    updateLabel();
+
+    clearTimeout(snapTimer);
+
+    snapTimer = setTimeout(() => {
+      document.body.classList.remove("panel-snapping");
+
+      if (map) {
+        map.invalidateSize({
+          animate: false,
+          pan: false
+        });
+      }
+    }, 340);
+  }
+
+  function nearestPosition(height) {
+    const ratio = height / viewportHeight();
+
+    return Object.keys(positions).reduce((closest, key) => {
+      return Math.abs(positions[key] - ratio) <
+        Math.abs(positions[closest] - ratio)
+        ? key
+        : closest;
+    }, "middle");
+  }
+
+  header.addEventListener("pointerdown", e => {
+    if (e.button !== 0) return;
+
+    dragging = true;
+    didMove = false;
+
+    startY = e.clientY;
+    startHeight = mapElement.getBoundingClientRect().height;
+
+    document.body.classList.remove("panel-snapping");
+    document.body.classList.add("panel-dragging");
+
+    header.setPointerCapture(e.pointerId);
+  });
+
+  header.addEventListener("pointermove", e => {
+    if (!dragging) return;
+
+    const delta = e.clientY - startY;
+
+    if (Math.abs(delta) > 5) {
+      didMove = true;
+    }
+
+    if (!didMove) return;
+
+    setMapHeight(startHeight + delta);
+  });
+
+  function finishDrag() {
+    if (!dragging) return;
+
+    dragging = false;
+
+    const height = mapElement.getBoundingClientRect().height;
+
+    if (didMove) {
+      snapTo(nearestPosition(height));
+    } else {
+      document.body.classList.remove("panel-dragging");
+    }
+  }
+
+  header.addEventListener("pointerup", finishDrag);
+  header.addEventListener("pointercancel", finishDrag);
+  header.addEventListener("lostpointercapture", finishDrag);
 
   toggle.addEventListener("click", e => {
     e.stopPropagation();
-    panel.classList.toggle("expanded");
-    syncLabel();
+
+    if (didMove) {
+      didMove = false;
+      return;
+    }
+
+    snapTo(
+      currentPosition === "collapsed"
+        ? "expanded"
+        : "collapsed"
+    );
   });
 
-  if (window.matchMedia("(max-width:768px)").matches) panel.classList.add("expanded");
-  syncLabel();
+  window.addEventListener("resize", () => {
+    snapTo(currentPosition);
+  });
+
+  // Initial position
+  updateLabel();
 })();
+
 
 
 /* ─── VENUE DETAIL: PREVENT TOP RUBBER-BAND ───────────────────── */
