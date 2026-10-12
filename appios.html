@@ -241,15 +241,17 @@ body.map-ready #map {
 }
 
 #moment-bar {
-  width: 100%;
+  width: max-content;
+  max-width: 100%;
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 
-  gap: 10px;
+  gap: 16px;
 
-  overflow: visible;
+  overflow-x: auto;
+  scrollbar-width: none;
 
   background: transparent;
   border: 0;
