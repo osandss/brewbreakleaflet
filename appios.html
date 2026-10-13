@@ -2543,9 +2543,7 @@ function _initMap(){
     _pendingUserLocation = null;
   }
 
-  if (!window.SipSober.isEmbed || _didReceiveInitialMoment) {
-    applyFiltersUnified();
-  }
+  applyFiltersUnified();
   
   window.SipSober?.sendVenuesToNative?.();
   kickSize();
