@@ -2934,12 +2934,6 @@ function renderList(data) {
     panelBody.scrollTop = 0;
   }
 
-  if (rc) {
-    rc.textContent = data.length === 0
-      ? "No spots"
-      : `${data.length} spot${data.length === 1 ? "" : "s"}`;
-  }
-
   /* -----------------------------
      EMPTY STATE
   ----------------------------- */
