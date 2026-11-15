@@ -434,8 +434,7 @@ body.map-ready #map {
 
 
 /* =========================================================
-   BOTTOM DISCOVERY SHEET
-   BREW BREAK — DARK ESPRESSO
+   BREW BREAK — FLOATING DISCOVERY SHEET
 ========================================================= */
 
 #bottom-panel {
@@ -443,6 +442,7 @@ body.map-ready #map {
 
   flex: 1 1 auto;
   min-height: 0;
+
   margin-top: -14px;
 
   z-index: 500;
@@ -454,29 +454,31 @@ body.map-ready #map {
 
   background:
     radial-gradient(
-      circle at 12% 0%,
-      rgba(154, 120, 100, .14),
-      transparent 38%
+      ellipse at 10% 0%,
+      rgba(154, 120, 100, .16),
+      transparent 48%
     ),
     linear-gradient(
       160deg,
-      #352923 0%,
-      #30251F 46%,
-      #291F1B 100%
+      rgba(53, 41, 35, .98) 0%,
+      rgba(48, 37, 31, .98) 48%,
+      rgba(41, 31, 27, .98) 100%
     );
 
-  border-radius: 0;
-  border-top: 0;
-  box-shadow: none;
+  border-radius: 26px 26px 0 0;
+
+  border-top: 1px solid rgba(255, 249, 243, .07);
+
+  box-shadow:
+    0 -12px 34px rgba(22, 15, 12, .17);
 
   overflow: hidden;
 }
 
 
-#panel-header {
-  display: none;
-}
-
+/* =========================================================
+   PANEL CONTENT
+========================================================= */
 
 #panel-body {
   flex: 1 1 auto;
@@ -491,19 +493,7 @@ body.map-ready #map {
 
   scrollbar-width: none;
 
-  /* Never expose a white surface during iOS scroll bounce */
-  background:
-    radial-gradient(
-      circle at 12% 0%,
-      rgba(154, 120, 100, .14),
-      transparent 38%
-    ),
-    linear-gradient(
-      160deg,
-      #352923 0%,
-      #30251F 46%,
-      #291F1B 100%
-    );
+  background: transparent;
 
   overscroll-behavior-y: contain;
 }
@@ -511,7 +501,6 @@ body.map-ready #map {
 #panel-body::-webkit-scrollbar {
   display: none;
 }
-
 
 #results {
   padding: 0;
@@ -599,54 +588,55 @@ body.map-ready #map {
 
 
 /* =========================================================
-   MAP SUMMARY
+   MAP SUMMARY — REFINED HEADER
 ========================================================= */
 
 .map-summary-card {
-  padding: 21px 22px 20px;
+  padding: 57px 24px 22px;
 }
 
+/* Small section label */
 
 .map-summary-eyebrow,
 .selected-venue-eyebrow {
-  margin-bottom: 9px;
+  margin-bottom: 10px;
 
-  color:
-    rgba(232, 213, 197, .48);
+  color: #C6A58F;
 
-  font-size: 9.5px;
-  font-weight: 650;
+  font-size: 10px;
+  font-weight: 700;
 
-  letter-spacing: .16em;
+  letter-spacing: .17em;
   text-transform: uppercase;
 }
 
+/* Main heading */
 
 .map-summary-title {
-  margin: 0 0 7px;
+  margin: 0 0 9px;
 
   color: #FFF9F3;
 
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 650;
 
-  line-height: 1.08;
+  line-height: 1.12;
   letter-spacing: -.035em;
 }
 
+/* Supporting text */
 
 .map-summary-copy {
-  max-width: 320px;
+  max-width: 340px;
 
   margin: 0;
 
-  color:
-    rgba(234, 221, 212, .55);
+  color: rgba(234, 221, 212, .68);
 
   font-size: 12.5px;
   font-weight: 400;
 
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 
@@ -655,7 +645,7 @@ body.map-ready #map {
 ========================================================= */
 
 .venue-browser {
-  padding: 0 22px 24px;
+  padding: 0 24px 28px;
 }
 
 .venue-browser-list {
@@ -667,24 +657,20 @@ body.map-ready #map {
 .venue-browse-card {
   appearance: none;
   -webkit-appearance: none;
-
   width: 100%;
-  padding: 17px 12px;
+  padding: 18px 4px 19px;
 
   display: block;
-
   border: 0;
-  border-bottom: 1px solid rgba(255, 249, 243, .10);
+  border-bottom: 1px solid rgba(255, 249, 243, .085);
   border-radius: 0;
 
   background: transparent;
-
   font-family: inherit;
   text-align: left;
 
   cursor: pointer;
   box-shadow: none;
-
   transition:
     opacity .16s ease,
     background .16s ease;
@@ -696,7 +682,6 @@ body.map-ready #map {
   opacity: .75;
 }
 
-
 .venue-browse-top {
   display: flex;
   align-items: flex-start;
@@ -704,7 +689,6 @@ body.map-ready #map {
 
   gap: 12px;
 }
-
 
 .venue-browse-name {
   min-width: 0;
@@ -718,7 +702,6 @@ body.map-ready #map {
 
   letter-spacing: -.02em;
 }
-
 
 .venue-browse-arrow {
   flex: 0 0 auto;
@@ -1375,7 +1358,9 @@ body.venue-detail-open #map {
 body.venue-detail-open #bottom-panel {
   margin-top: -30px;
 
-  background: transparent;
+  background: #2A211D;
+
+  border-radius: 26px 26px 0 0;
 
   transition:
     margin-top .38s cubic-bezier(.22, .8, .25, 1);
@@ -1500,6 +1485,10 @@ body.venue-detail-open
 }
 
 
+/* =========================================================
+   FLOATING PANEL HANDLE
+========================================================= */
+
 #bottom-panel #panel-header {
   display: flex;
   align-items: center;
@@ -1510,44 +1499,57 @@ body.venue-detail-open
   left: 0;
   right: 0;
 
-  height: 34px;
+  height: 38px;
+
   z-index: 30;
 
-  background: linear-gradient(
-    to bottom,
-    rgba(42, 33, 29, .88) 0%,
-    rgba(42, 33, 29, .65) 55%,
-    rgba(42, 33, 29, .25) 100%
-  );
+  background: transparent;
 
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  cursor: grab;
+  touch-action: none;
+
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Handle button */
+
 #bottom-panel #panel-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 24px;
+
+  width: 58px;
+  height: 30px;
+
   padding: 0;
+
   border: 0;
   background: transparent;
+
+  cursor: inherit;
+  touch-action: none;
 }
 
-/* Hide the old label */
+/* Hide old label */
+
 #bottom-panel #panel-toggle .label {
   display: none;
 }
 
-/* Style the existing handle */
+/* Handle appearance */
+
 #bottom-panel #panel-toggle .handle {
   display: block;
-  width: 38px;
+
+  width: 36px;
   height: 4px;
+
   border-radius: 999px;
-  background: rgba(255, 249, 243, .85);
+
+  background: rgba(255, 249, 243, .76);
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
 }
 
 
