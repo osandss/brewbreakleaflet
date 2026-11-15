@@ -477,29 +477,23 @@ body.map-ready #map {
 
 
 /* =========================================================
-   BREW BREAK — FIXED DISCOVERY HEADER
+   BREW BREAK — SCROLLING DISCOVERY HEADER
 ========================================================= */
 
-#panel-fixed-header {
-  flex: 0 0 auto;
-  position: relative;
-  z-index: 10;
-
-  background: #2A211D;
-
-  border-bottom: 1px solid rgba(255, 249, 243, .08);
-}
-
-/* Fixed header content */
-
-#panel-fixed-header .map-summary-card {
-  padding: 52px 24px 19px;
-}
-
-/* Keep draggable handle above the header */
+/* Only the draggable handle stays fixed */
 
 #bottom-panel #panel-header {
   z-index: 30;
+}
+
+/* Discovery header scrolls with café listings */
+
+#results .map-summary-card {
+  padding: 51px 24px 19px;
+
+  background: transparent;
+
+  border-bottom: 1px solid rgba(255, 249, 243, .08);
 }
 
 
@@ -638,18 +632,17 @@ body.venue-detail-open #panel-body {
 
 
 /* =========================================================
-   MAP SUMMARY — REFINED HEADER
+   BREW BREAK — MAP SUMMARY
 ========================================================= */
 
 .map-summary-card {
-  padding: 57px 24px 22px;
+  padding: 51px 24px 19px;
 }
 
 /* Small section label */
 
-.map-summary-eyebrow,
-.selected-venue-eyebrow {
-  margin-bottom: 10px;
+.map-summary-eyebrow {
+  margin-bottom: 8px;
 
   color: #C6A58F;
 
@@ -663,30 +656,35 @@ body.venue-detail-open #panel-body {
 /* Main heading */
 
 .map-summary-title {
-  margin: 0 0 9px;
+  margin: 0;
 
   color: #FFF9F3;
 
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 650;
 
-  line-height: 1.12;
+  line-height: 1.16;
   letter-spacing: -.035em;
 }
 
-/* Supporting text */
+/* Subtitle hidden for a cleaner layout */
 
 .map-summary-copy {
-  max-width: 340px;
+  display: none;
+}
 
-  margin: 0;
+/* Keep the venue detail eyebrow styling */
 
-  color: rgba(234, 221, 212, .68);
+.selected-venue-eyebrow {
+  margin-bottom: 10px;
 
-  font-size: 12.5px;
-  font-weight: 400;
+  color: #C6A58F;
 
-  line-height: 1.5;
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: .17em;
+  text-transform: uppercase;
 }
 
 
@@ -1553,7 +1551,7 @@ body.venue-detail-open
 
   z-index: 30;
 
-  background: transparent;
+  background: #2A211D;
 
   cursor: grab;
   touch-action: none;
@@ -1687,20 +1685,25 @@ body.ss-embed #resetBtn {
 
 <div id="bottom-panel">
 
-  <!-- DRAGGABLE HANDLE -->
+  <!-- FIXED DRAGGABLE HANDLE -->
   <div id="panel-header">
-    <button id="panel-toggle" type="button" aria-expanded="false">
+
+    <button
+      id="panel-toggle"
+      type="button"
+      aria-expanded="false"
+    >
       <span class="handle" aria-hidden="true"></span>
       <span class="label">Show</span>
     </button>
+
   </div>
 
-  <!-- FIXED DISCOVERY HEADER -->
-  <div id="panel-fixed-header"></div>
-
-  <!-- SCROLLABLE CAFÉ LIST -->
+  <!-- SCROLLABLE DISCOVERY HEADER + CAFÉ LIST -->
   <div id="panel-body">
+
     <div id="results"></div>
+
   </div>
 
 </div>
@@ -2919,15 +2922,13 @@ function renderMarkers(data) {
 
 function renderList(data) {
   const results = document.getElementById("results");
-  const fixedHeader = document.getElementById("panel-fixed-header");
   const panelBody = document.getElementById("panel-body");
 
-  if (!results || !fixedHeader) return;
+  if (!results) return;
 
   document.body.classList.remove("venue-detail-open");
 
   results.innerHTML = "";
-  fixedHeader.innerHTML = "";
 
   // Start at the top whenever the café list is refreshed
   if (panelBody) {
@@ -2940,7 +2941,7 @@ function renderList(data) {
 
   if (!data.length) {
 
-    fixedHeader.innerHTML = `
+    results.innerHTML = `
       <div class="map-summary-card">
   
         <div class="map-summary-eyebrow">
@@ -3098,10 +3099,11 @@ function renderList(data) {
 
 
   /* -----------------------------
-   FIXED DISCOVERY HEADER
+   SCROLLABLE DISCOVERY HEADER
+   + CAFÉ LIST
 ----------------------------- */
 
-fixedHeader.innerHTML = `
+results.innerHTML = `
 
   <div class="map-summary-card">
 
@@ -3113,20 +3115,7 @@ fixedHeader.innerHTML = `
       ${title}
     </div>
 
-    <div class="map-summary-copy">
-      ${copy}
-    </div>
-
   </div>
-
-`;
-
-
-/* -----------------------------
-   SCROLLABLE CAFÉ LIST
------------------------------ */
-
-results.innerHTML = `
 
   <div class="venue-browser">
 
@@ -3145,14 +3134,8 @@ window.SipSober?.sendVenuesToNative?.(data);
 
 function renderSelectedVenue(loc){
   const results = document.getElementById("results");
-  const fixedHeader = document.getElementById("panel-fixed-header");
 
   if (!results || !loc) return;
-
-  // Hide the discovery header in venue detail mode
-  if (fixedHeader) {
-    fixedHeader.innerHTML = "";
-  }
 
   document.body.classList.add("venue-detail-open");
 
