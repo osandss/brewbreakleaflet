@@ -477,7 +477,34 @@ body.map-ready #map {
 
 
 /* =========================================================
-   PANEL CONTENT
+   BREW BREAK — FIXED DISCOVERY HEADER
+========================================================= */
+
+#panel-fixed-header {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 10;
+
+  background: #2A211D;
+
+  border-bottom: 1px solid rgba(255, 249, 243, .08);
+}
+
+/* Fixed header content */
+
+#panel-fixed-header .map-summary-card {
+  padding: 52px 24px 19px;
+}
+
+/* Keep draggable handle above the header */
+
+#bottom-panel #panel-header {
+  z-index: 30;
+}
+
+
+/* =========================================================
+   SCROLLABLE CAFÉ LIST
 ========================================================= */
 
 #panel-body {
@@ -504,6 +531,29 @@ body.map-ready #map {
 
 #results {
   padding: 0;
+}
+
+/* Café listings scroll below fixed header */
+
+.venue-browser {
+  padding-top: 0;
+}
+
+
+/* =========================================================
+   VENUE DETAIL MODE
+========================================================= */
+
+body.venue-detail-open #panel-fixed-header {
+  display: none;
+}
+
+body.venue-detail-open #panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 
@@ -1636,6 +1686,8 @@ body.ss-embed #resetBtn {
 </div>
 
 <div id="bottom-panel">
+
+  <!-- DRAGGABLE HANDLE -->
   <div id="panel-header">
     <button id="panel-toggle" type="button" aria-expanded="false">
       <span class="handle" aria-hidden="true"></span>
@@ -1643,9 +1695,14 @@ body.ss-embed #resetBtn {
     </button>
   </div>
 
+  <!-- FIXED DISCOVERY HEADER -->
+  <div id="panel-fixed-header"></div>
+
+  <!-- SCROLLABLE CAFÉ LIST -->
   <div id="panel-body">
     <div id="results"></div>
   </div>
+
 </div>
 
 <script>
@@ -2862,13 +2919,20 @@ function renderMarkers(data) {
 
 function renderList(data) {
   const results = document.getElementById("results");
-  const rc = document.getElementById("results-count");
+  const fixedHeader = document.getElementById("panel-fixed-header");
+  const panelBody = document.getElementById("panel-body");
 
-  if (!results) return;
+  if (!results || !fixedHeader) return;
 
   document.body.classList.remove("venue-detail-open");
 
   results.innerHTML = "";
+  fixedHeader.innerHTML = "";
+
+  // Start at the top whenever the café list is refreshed
+  if (panelBody) {
+    panelBody.scrollTop = 0;
+  }
 
   if (rc) {
     rc.textContent = data.length === 0
@@ -2881,24 +2945,25 @@ function renderList(data) {
   ----------------------------- */
 
   if (!data.length) {
-    results.innerHTML = `
-      <div class="map-summary-card">
 
+    fixedHeader.innerHTML = `
+      <div class="map-summary-card">
+  
         <div class="map-summary-eyebrow">
           No matches
         </div>
-
+  
         <div class="map-summary-title">
           Try another moment
         </div>
-
+  
         <div class="map-summary-copy">
           Switch the filter above to explore more coffee spots.
         </div>
-
+  
       </div>
     `;
-
+  
     return;
   }
 
@@ -3039,46 +3104,61 @@ function renderList(data) {
 
 
   /* -----------------------------
-     RENDER
-  ----------------------------- */
+   FIXED DISCOVERY HEADER
+----------------------------- */
 
-  results.innerHTML = `
+fixedHeader.innerHTML = `
 
-    <div class="map-summary-card">
+  <div class="map-summary-card">
 
-      <div class="map-summary-eyebrow">
-        ${eyebrow}
-      </div>
-
-      <div class="map-summary-title">
-        ${title}
-      </div>
-
-      <div class="map-summary-copy">
-        ${copy}
-      </div>
-
+    <div class="map-summary-eyebrow">
+      ${eyebrow}
     </div>
 
-
-    <div class="venue-browser">
-
-      <div class="venue-browser-list">
-        ${venueCards}
-      </div>
-
+    <div class="map-summary-title">
+      ${title}
     </div>
 
-  `;
+    <div class="map-summary-copy">
+      ${copy}
+    </div>
+
+  </div>
+
+`;
 
 
-  window.SipSober?.sendVenuesToNative?.(data);
+/* -----------------------------
+   SCROLLABLE CAFÉ LIST
+----------------------------- */
+
+results.innerHTML = `
+
+  <div class="venue-browser">
+
+    <div class="venue-browser-list">
+      ${venueCards}
+    </div>
+
+  </div>
+
+`;
+
+
+window.SipSober?.sendVenuesToNative?.(data);
+
 }
 
 function renderSelectedVenue(loc){
   const results = document.getElementById("results");
+  const fixedHeader = document.getElementById("panel-fixed-header");
 
   if (!results || !loc) return;
+
+  // Hide the discovery header in venue detail mode
+  if (fixedHeader) {
+    fixedHeader.innerHTML = "";
+  }
 
   document.body.classList.add("venue-detail-open");
 
